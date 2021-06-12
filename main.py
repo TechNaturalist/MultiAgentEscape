@@ -67,9 +67,8 @@ def init_game():
 def inputs():
 	pass
 def update():
-
-for agent in agentlist:
-	renderList.append(agent)
+	for agent in agentlist:
+		renderList.append(agent)
 
 	pass   
 
