@@ -1,5 +1,6 @@
 from abstract_agent import AbstractAgent
 
+
 class Player(AbstractAgent):
     def __init__(self, position) -> None:
         super().__init__(position)
