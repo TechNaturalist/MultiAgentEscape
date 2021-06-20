@@ -2,10 +2,14 @@
 
 import random, pygame, sys, math, time
 import Menu
-
 from pygame.locals import *
+
+import Helper
+Helper.startAll()
+
 from Renderer import Renderer
 from Input import Input
+
 
 GAMECAPTION = 'Group 9: Final Project'
 
@@ -13,7 +17,7 @@ FPS = 30
 renderList = []
 
 def main():
-	pygame.init()
+
 	pygame.display.set_caption(GAMECAPTION)
 
 	while True:

@@ -2,47 +2,59 @@ import copy
 import pygame
 from pygame.locals import *
 
-defalts = {
-	"up"		= K_w,
-	"down"	= K_s,
-	"left"	= K_a,
-	"right"	= K_d
+defaults = {
+	"up"	: K_w,
+	"down"	: K_s,
+	"left"	: K_a,
+	"right"	: K_d
 }
 
 class Input:
-	def __init__(self):
-		this.map = default
-		this.currentInputs = {}
-		this.keys = []
-		this.mouse = {}
+	__instance = None
+	@staticmethod
+	def getInstance():
+		if Input.__instance == None:
+			Input()
+		return Input.__instance
 
-	def set_inputs(self, location, key); 
-		this.map[location] = key
+	def __init__(self):
+		if Input.__instance != None:
+			raise Exception("this class is a singleton!")
+		else:
+			self.map = defaults
+			print(defaults)
+			self.currentInputs = {}
+			self.keys = []
+			self.mouse = {}
+			Input.__instance = self
+
+	def set_inputs(self, location, key):
+		self.map[location] = key
 
 	def get_keys(self):
-	for event in pygame.event.get():
-		if ( event.type == KEYDOWN ):
-			if ( event.key == self.map["up"] ):
-				this.keys.append('up')
-			elif ( event.key == self.map["down"] ):
-				this.keys.append('down')
-			elif ( event.key == self.map["left"] ):
-				this.keys.append('left')
-			elif ( event.key == self.map["right"] ):
-				this.keys.append('right')
-			elif ( event.key == K_ESCAPE ):
-				this.keys.append('back')
-			elif ( event.key == K_RETURN ):
-				this.keys.append('enter')
+		for event in pygame.event.get():
+			if ( event.type == KEYDOWN ):
+				if ( event.key == self.map["up"] ):
+					self.keys.append('up')
+				elif ( event.key == self.map["down"] ):
+					self.keys.append('down')
+				elif ( event.key == self.map["left"] ):
+					self.keys.append('left')
+				elif ( event.key == self.map["right"] ):
+					self.keys.append('right')
+				elif ( event.key == K_ESCAPE ):
+					self.keys.append('back')
+				elif ( event.key == K_RETURN ):
+					self.keys.append('enter')
 
 	def get_mouse(self):
-	pass
+		pass
 
-	def get(self):
-		this.get_mouse()
-		this.get_keys()
+	def getInput(self):
+		self.get_mouse()
+		self.get_keys()
 
 		return {
-			"mouse": this.mouse,
-			"keys": this.keys 
+			"mouse": self.mouse,
+			"keys": self.keys 
 		}
