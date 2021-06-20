@@ -7,5 +7,5 @@ def startAll():
 	print("Starting...")
 
 def terminate():
-	pygame.quit
+	pygame.quit()
 	sys.exit

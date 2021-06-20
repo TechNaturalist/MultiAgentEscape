@@ -1,8 +1,10 @@
 # Game main By Dick Loveland
 
 import random, pygame, sys, math, time
-import Menu
+import Menu, Game
 from pygame.locals import *
+
+
 
 import Helper
 Helper.startAll()
@@ -21,8 +23,11 @@ def main():
 	pygame.display.set_caption(GAMECAPTION)
 
 	while True:
-		menuOptions = Menu.start()
-		#Game.start(menuOptions)
+		#menuOptions = Menu.start()
+		menuOptions = {
+			'guards': 1
+		}
+		Game.start(menuOptions)
 
 if __name__ == '__main__':
     main()

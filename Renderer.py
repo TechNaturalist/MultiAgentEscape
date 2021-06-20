@@ -3,13 +3,12 @@ from pygame.locals import *
 
 WIDTH = 640
 HEIGHT = 640
-CELLSIZE = 128
+CELLSIZE = 32
 RADIUS = math.floor(CELLSIZE/2.5)
 assert WIDTH % CELLSIZE == 0, "Window width must be a multiple of cell size."
 assert HEIGHT % CELLSIZE == 0, "Window height must be a multiple of cell size."
 CELLWIDTH = int(WIDTH / CELLSIZE)
 CELLHEIGHT = int(HEIGHT / CELLSIZE)
-
 
 pygame.init()
 
@@ -23,10 +22,12 @@ class Renderer:
 	GREEN		= (  0, 255,   0)
 	DARKGREEN	= (  0, 155,   0)
 	DARKGRAY 	= ( 40,  40,  40)
-	GRAY 		= (100,  100,100)
+	GRAY 		= (100, 100, 100)
 	PURPLE		= (155,   0, 155)
 	YELLOW		= (255, 255,   0)
 	BGCOLOR		= (  0,   0,   0)
+	RED			= (255,   0,   0)
+	CORAL		= (255,  77,  77)
 
 	@staticmethod
 	def getInstance():
@@ -59,8 +60,28 @@ class Renderer:
 			rect.topleft = (width(center['x']) - 18, height(center['y'])- 18)
 		self.display.blit(surf, rect)
 
+	def drawGuard( self, position ):
+		xcenter = position['x'] * CELLSIZE + math.floor(CELLSIZE/2)
+		ycenter = position['y'] * CELLSIZE + math.floor(CELLSIZE/2)
+		pygame.draw.circle(self.display, Renderer.RED, (xcenter, ycenter), RADIUS)
+
+	def drawGrid(self):
+		for x in range(0, WIDTH, CELLSIZE):
+			pygame.draw.line(self.display, Renderer.BGCOLOR, (x, 0), (x, HEIGHT))
+		for y in range(0, HEIGHT, CELLSIZE):
+			pygame.draw.line(self.display, Renderer.BGCOLOR, (0, y), (WIDTH, y))
+
+	def colorTile(self, tile, color):
+		x = tile['x'] * CELLSIZE
+		y = tile['y'] * CELLSIZE
+		tileRect = pygame.Rect(x,y,CELLSIZE,CELLSIZE)
+		pygame.draw.rect(self.display, color, tileRect)
+
 	def menuBackground(self):
-		self.display.fill(self.BGCOLOR)
+		self.display.fill(Renderer.BLACK)
+
+	def gameBackground(self):
+		self.display.fill(self.DARKGRAY)
 
 	def finishRendering(self):
 		pygame.display.update()
