@@ -23,6 +23,7 @@ class AbstractAgent(ABC):
         self.is_dead = False
         self.attack_dice = (2, 8)
         self.defence = 12
+        self.debug = False
 
     def look_around(self, board: List[List[Tile]]) -> List[Tile]:
         """Looks around and returns a 2D array of tiles around"""
@@ -103,3 +104,11 @@ class AbstractAgent(ABC):
             hp_perceived = int(self.total_hp * 0.333)
 
         return hp_perceived + self.weapon
+
+    @abstractmethod
+    def update(self, inputs):
+        pass
+
+    @abstractmethod
+    def render(self, board: List[List[Tile]]):
+        pass
