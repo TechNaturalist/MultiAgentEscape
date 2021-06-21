@@ -20,7 +20,7 @@ class Coalition:
         # Add utility of all potential members
         for member in potential_members:
             utility += member.attitude + member.weapon
-        
+
         # The total utility is the utility of each potential member divided by the number of people ^ 1.3
         utility = utility / ((len(potential_members) + 1) ** 1.3)
 

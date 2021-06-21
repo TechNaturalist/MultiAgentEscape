@@ -4,168 +4,196 @@ from Input import Input
 from Renderer import Renderer
 from Guard import Guard
 
-renderList = []
-gameMap = []
+render_list = []
+game_map = []
+
 
 def start(options):
-	global RENDERER, INPUTS, inputs
+    global RENDERER, INPUTS, inputs
 
-	RENDERER = Renderer.getInstance()
-	INPUTS = Input.getInstance()
-	endGame = False
-	inputs = {}
+    RENDERER = Renderer.get_instance()
+    INPUTS = Input.get_instance()
+    game_map = False
+    inputs = {}
 
-	gameInit( options )
+    game_init(options)
 
-	while not endGame:
-		inputs = INPUTS.getInput();
-		endGame = update( inputs )
-		render()
+    while not game_map:
+        inputs = INPUTS.get_input()
+        game_map = update(inputs)
+        render()
 
-def gameInit( options ):
-	global guards, gameMap
 
-	guards = []
+def game_init(options):
+    global guards, game_map
 
-	for i in range(options['guards']):
-		guards.append( Guard( True, { 'x':4, 'y':4 } ) )
+    guards = []
 
-	gameMap = []
-	## Creating a map (need to automate)
-	for i in range(20):
-		tmp = []
-		for j in range(20):
-			tmp.append( {'x': i, 'y': j} )
-		gameMap.append(tmp)
+    for i in range(options['guards']):
+        guards.append(Guard(True, {'x': 4, 'y': 4}))
+
+    game_map = []
+    # Creating a map (need to automate)
+    for i in range(20):
+        tmp = []
+        for j in range(20):
+            tmp.append({'x': i, 'y': j})
+        game_map.append(tmp)
+
 
 def update(inputs):
-	global renderList 
-	renderList = []
+    global render_list
+    render_list = []
 
-	for guard in guards:
-		guard.getSight( getPercepts( guard ) )
-		renderList.append( guard.update() )
+    for guard in guards:
+        guard.getSight(get_percepts(guard))
+        render_list.append(guard.update())
 
-	return False
+    return False
+
 
 def render():
-	RENDERER.gameBackground()
-	for sprite in renderList:
-		sprite.render()
+    RENDERER.game_background()
+    for sprite in render_list:
+        sprite.render()
 
-	RENDERER.drawGrid()
-	RENDERER.finishRendering()
-
-
-def getPercepts( sprite ):
-	percepts = []
+    RENDERER.draw_grid()
+    RENDERER.finish_rendering()
 
 
-	percepts.append(gameMap[sprite.position['x'] ][sprite.position['y']  ])
-	## Adjacent Tiles
-	try:
-		percepts.append(gameMap[sprite.position['x'] -1][sprite.position['y'] -1 ])
-	except IndexError:
-		pass
+def get_percepts(sprite):
+    percepts = []
 
-	try:
-		percepts.append(gameMap[sprite.position['x'] -1][sprite.position['y']])
-	except IndexError:
-		pass
+    percepts.append(game_map[sprite.position['x']][sprite.position['y']])
+    # Adjacent Tiles
+    try:
+        percepts.append(game_map[sprite.position['x'] - 1]
+                        [sprite.position['y'] - 1])
+    except IndexError:
+        pass
 
-	try:
-		percepts.append(gameMap[sprite.position['x'] -1][sprite.position['y'] +1 ])
-	except IndexError:
-		pass
-	try:
-		percepts.append(gameMap[sprite.position['x'] ][sprite.position['y'] -1 ])
-	except:
-		pass
-	try:
-		percepts.append(gameMap[sprite.position['x'] -0][sprite.position['y'] +1 ])
-	except:
-		pass
-	try:
-		percepts.append(gameMap[sprite.position['x'] +1][sprite.position['y'] -1 ])
-	except:
-		pass
-	try:
-		percepts.append(gameMap[sprite.position['x'] +1][sprite.position['y'] -0 ])
-	except:
-		pass
-	try:
-		percepts.append(gameMap[sprite.position['x'] +1][sprite.position['y'] +1 ])
-	except:
-		pass
+    try:
+        percepts.append(game_map[sprite.position['x'] - 1]
+                        [sprite.position['y']])
+    except IndexError:
+        pass
 
-	#Non adjecent tiles
-	try:
-		percepts.append(gameMap[sprite.position['x'] -2][sprite.position['y'] -2 ])
-	except:
-		pass 
-	try:
-		percepts.append(gameMap[sprite.position['x'] -2][sprite.position['y'] -1 ])
-	except:
-		pass 
-	try:
-		percepts.append(gameMap[sprite.position['x'] -2][sprite.position['y'] -0 ])
-	except:
-		pass 
-	try:
-		percepts.append(gameMap[sprite.position['x'] -2][sprite.position['y'] +1 ])
-	except:
-		pass 
-	try:
-		percepts.append(gameMap[sprite.position['x'] -2][sprite.position['y'] +2 ])
-	except:
-		pass 
-	try:
-		percepts.append(gameMap[sprite.position['x'] -2][sprite.position['y'] -1 ])
-	except:
-		pass 
-	try:
-		percepts.append(gameMap[sprite.position['x'] -1][sprite.position['y'] -2 ])
-	except:
-		pass 
-	try:
-		percepts.append(gameMap[sprite.position['x'] -1][sprite.position['y'] +2 ])
-	except:
-		pass 
-	try:
-		percepts.append(gameMap[sprite.position['x'] -0][sprite.position['y'] -2 ])
-	except:
-		pass 
-	try:
-		percepts.append(gameMap[sprite.position['x'] -0][sprite.position['y'] +2 ])
-	except:
-		pass 
-	try:
-		percepts.append(gameMap[sprite.position['x'] +1][sprite.position['y'] -2 ])
-	except:
-		pass 
-	try:
-		percepts.append(gameMap[sprite.position['x'] +1][sprite.position['y'] +2 ])
-	except:
-		pass 
-	try:
-		percepts.append(gameMap[sprite.position['x'] +2][sprite.position['y'] -2 ])
-	except:
-		pass 
-	try:
-		percepts.append(gameMap[sprite.position['x'] +2][sprite.position['y'] -1 ])
-	except:
-		pass 
-	try:
-		percepts.append(gameMap[sprite.position['x'] +2][sprite.position['y'] -0 ])
-	except:
-		pass 
-	try:
-		percepts.append(gameMap[sprite.position['x'] +2][sprite.position['y'] +1 ])
-	except:
-		pass 
-	try:
-		percepts.append(gameMap[sprite.position['x'] +2][sprite.position['y'] +2 ])
-	except:
-		pass
+    try:
+        percepts.append(game_map[sprite.position['x'] - 1]
+                        [sprite.position['y'] + 1])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x']]
+                        [sprite.position['y'] - 1])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] - 0]
+                        [sprite.position['y'] + 1])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] + 1]
+                        [sprite.position['y'] - 1])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] + 1]
+                        [sprite.position['y'] - 0])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] + 1]
+                        [sprite.position['y'] + 1])
+    except IndexError:
+        pass
 
-	return percepts
+    # Non adjecent tiles
+    try:
+        percepts.append(game_map[sprite.position['x'] - 2]
+                        [sprite.position['y'] - 2])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] - 2]
+                        [sprite.position['y'] - 1])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] - 2]
+                        [sprite.position['y'] - 0])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] - 2]
+                        [sprite.position['y'] + 1])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] - 2]
+                        [sprite.position['y'] + 2])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] - 2]
+                        [sprite.position['y'] - 1])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] - 1]
+                        [sprite.position['y'] - 2])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] - 1]
+                        [sprite.position['y'] + 2])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] - 0]
+                        [sprite.position['y'] - 2])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] - 0]
+                        [sprite.position['y'] + 2])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] + 1]
+                        [sprite.position['y'] - 2])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] + 1]
+                        [sprite.position['y'] + 2])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] + 2]
+                        [sprite.position['y'] - 2])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] + 2]
+                        [sprite.position['y'] - 1])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] + 2]
+                        [sprite.position['y'] - 0])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] + 2]
+                        [sprite.position['y'] + 1])
+    except IndexError:
+        pass
+    try:
+        percepts.append(game_map[sprite.position['x'] + 2]
+                        [sprite.position['y'] + 2])
+    except IndexError:
+        pass
+
+    return percepts

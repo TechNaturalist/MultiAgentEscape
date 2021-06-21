@@ -12,13 +12,9 @@ KNIFE = 4
 GUN = 6
 BANANA = 9000
 
-<<<<<<< HEAD
-=======
-#stash move
->>>>>>> origin/dick
 
 class AbstractAgent(ABC):
-    def __init__(self, position) -> None:
+    def __init__(self, position: Tile) -> None:
         self.position = position
         self.hp = 10
         self.total_hp = 10
@@ -28,12 +24,12 @@ class AbstractAgent(ABC):
         self.attack_dice = (2, 8)
         self.defence = 12
 
-    def look_around(self) -> List[List[Tile]]:
+    def look_around(self, board: List[List[Tile]]) -> List[Tile]:
         """Looks around and returns a 2D array of tiles around"""
         # TODO: Add look around code
         pass
 
-    def listen(self) -> List[List[Tile]]:
+    def listen(self) -> List[Tile]:
         """Listens and returns a 2D array of objects heard"""
         # TODO: Add listen code
         pass
@@ -81,7 +77,6 @@ class AbstractAgent(ABC):
         Returns:
             int: The damage that can be dealt
         """
-        
 
         # Shouldn't get here, but in case...
         return self.weapon
@@ -106,6 +101,5 @@ class AbstractAgent(ABC):
             hp_perceived = int(self.total_hp * 0.75)
         else:
             hp_perceived = int(self.total_hp * 0.333)
-        
-        return hp_perceived + self.weapon
 
+        return hp_perceived + self.weapon

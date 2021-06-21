@@ -4,48 +4,51 @@ from Renderer import Renderer
 from Input import Input
 from MainMenu import MainMenu
 
-#Syntactic Sugar
+# Syntactic Sugar
 FIRST = 0
 
 #
-INPUT = Input.getInstance()
-RENDERER = Renderer.getInstance()
+INPUT = Input.get_instance()
+RENDERER = Renderer.get_instance()
 #
-menuStack = [ MainMenu() ]
-inputs  = {}
-last = 0;
+menu_stack = [MainMenu()]
+inputs = {}
+last = 0
 Options = {}
 
-def start():
-	global inputs
-	while ( len(menuStack) != 0 ):
-		inputs = INPUT.getInput()
-		update()
-		render();
 
-	return Options;
+def start():
+    global inputs
+    while (len(menu_stack) != 0):
+        inputs = INPUT.get_input()
+        update()
+        render()
+
+    return Options
 
 
 def update():
-	global Options
-	Options = menuStack[last].update( inputs, Options );
-	nextInstruction( menuStack[last].nextAction() )
+    global Options
+    Options = menu_stack[last].update(inputs, Options)
+    next_instruction(menu_stack[last].next_action())
+
 
 def render():
-	RENDERER.menuBackground();
-	menuStack[last].render();
-	RENDERER.finishRendering();
-	pass
+    RENDERER.menu_background()
+    menu_stack[last].render()
+    RENDERER.finish_rendering()
+    pass
 
-def nextInstruction( action ):
-	if   ( action == 'back' ):
-		menuStack.pop()
-		last -= 1
-	elif ( action == 'addOption'):
-		menuStack.append( OptionsMenu() )
-		last += 1
-	elif ( action == 'addAbout'):
-		menuStack.append( AboutMenu() )
-		last += 1
-	else:
-		pass
+
+def next_instruction(action):
+    if (action == 'back'):
+        menu_stack.pop()
+        last -= 1
+    elif (action == 'addOption'):
+        menu_stack.append(OptionsMenu())
+        last += 1
+    elif (action == 'addAbout'):
+        menu_stack.append(AboutMenu())
+        last += 1
+    else:
+        pass

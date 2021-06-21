@@ -4,6 +4,7 @@ from abstract_agent import AbstractAgent
 
 BRIBE_AMOUNT = 25
 
+
 def bribe(player: AbstractAgent, agent: AbstractAgent) -> Tuple[AbstractAgent, AbstractAgent]:
 
     # Form matrix:

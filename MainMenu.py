@@ -2,84 +2,83 @@ from Renderer import Renderer
 from Input import Input
 import Helper
 
-Renderer = Renderer.getInstance()
-Input = Input.getInstance()
+Renderer = Renderer.get_instance()
+Input = Input.get_instance()
 
-STATEMACHINE = ['play','options', 'help', 'about']
+STATEMACHINE = ['play', 'options', 'help', 'about']
 
 
 ## Helper Class for organization ##
 
-class mainMenuItem:
-	def __init__( self, text, center, size, highlighted  ):
-		self.text = text
-		self.center = center
-		self.size = size
-		self.highlighted = highlighted
+class MainMenuItem:
+    def __init__(self, text, center, size, highlighted):
+        self.text = text
+        self.center = center
+        self.size = size
+        self.highlighted = highlighted
 
-	def render(self):
-		if  not self.highlighted :
-			Renderer.drawText(self.text, self.center, 'menu', Renderer.WHITE) 
-		else:
-			Renderer.drawText(self.text, self.center, 'menu', Renderer.GREEN)
+    def render(self):
+        if not self.highlighted:
+            Renderer.draw_text(self.text, self.center, 'menu', Renderer.WHITE)
+        else:
+            Renderer.draw_text(self.text, self.center, 'menu', Renderer.GREEN)
 
 
 ## Main Class ##
 
 class MainMenu:
-	def __init__(self):
-		self.items = [
-			mainMenuItem('Play',	{'x': 75, 'y':60}, 18, True),
-			mainMenuItem('Options',	{'x': 75, 'y':65}, 18, False),
-			mainMenuItem('Help',	{'x': 75, 'y':70}, 18, False),
-			mainMenuItem('About',	{'x': 75, 'y':75}, 18, False)
-		]
-		self.titleSize = "30"
-		self.title = "Prison Escape"
-		self.state = 'play'
-		self.nextAct = ''
-		self.stateIndex = 0
+    def __init__(self):
+        self.items = [
+            MainMenuItem('Play', {'x': 75, 'y': 60}, 18, True),
+            MainMenuItem('Options', {'x': 75, 'y': 65}, 18, False),
+            MainMenuItem('Help', {'x': 75, 'y': 70}, 18, False),
+            MainMenuItem('About', {'x': 75, 'y': 75}, 18, False)
+        ]
+        self.titleSize = "30"
+        self.title = "Prison Escape"
+        self.state = 'play'
+        self.next_action = ''
+        self.stateIndex = 0
 
-	def update(self, inputs, options  ):
-		if (len(inputs['keys']) != 0  ):
-			if ( inputs['keys'][0] == 'enter' ):
-				self.enter()
-			elif ( inputs['keys'][0] == 'back' ):
-				Helper.terminate()
-			else:
-				self.changeState(inputs)
-		return options
+    def update(self, inputs, options):
+        if (len(inputs['keys']) != 0):
+            if (inputs['keys'][0] == 'enter'):
+                self.enter()
+            elif (inputs['keys'][0] == 'back'):
+                Helper.terminate()
+            else:
+                self.change_state(inputs)
+        return options
 
-	def enter(self):
-		if ( state == 'play'):
-			self.nextAction = 'pop'
-		elif (state == 'options'):
-			self.nextAction = 'addOption'
-		elif (state == 'help'):
-			self.nextAction = 'addHelp'
-		elif ( state == 'about'):
-			self.nextAction = 'addAbout'
+    def enter(self):
+        if (self.state == 'play'):
+            self.next_action = 'pop'
+        elif (self.state == 'options'):
+            self.next_action = 'addOption'
+        elif (self.state == 'help'):
+            self.next_action = 'addHelp'
+        elif (self.state == 'about'):
+            self.next_action = 'addAbout'
 
+    def get_next_action(self):
+        return self.next_action
 
-	def nextAction(self):
-		return self.nextAct;
+    def change_state(self, inputs):
+        if (inputs['keys'] == 'up'):
+            self.items[self.stateIndex].highlighted = False
+            self.stateIndex = (self.stateIndex + 3) % 4
+            self.state = STATEMACHINE[self.stateIndex]
+            self.items[self.stateIndex].highlighted = True
+        elif (inputs['keys'] == 'down'):
+            self.items[self.stateIndex].highlighted = False
+            self.stateIndex = (self.stateIndex + 1) % 4
+            self.state = STATEMACHINE[self.stateIndex]
+            self.items[self.stateIndex].highlighted = True
+        else:
+            pass
 
-	def changeState(self, inputs):
-		if ( inputs['keys'] == 'up') :
-			self.items[self.stateIndex].highlighted = False
-			self.stateIndex = ( self.stateIndex + 3 ) % 4 
-			self.state = STATEMACHINE[ self.stateIndex  ]
-			self.items[self.stateIndex].highlighted = True
-		elif ( inputs['keys'] == 'down' ):
-			self.items[self.stateIndex].highlighted = False
-			self.stateIndex = ( self.stateIndex + 1 ) % 4 
-			self.state = STATEMACHINE[ self.stateIndex  ]
-			self.items[self.stateIndex].highlighted = True
-		else:
-			pass
-
-
-	def render(self):
-		Renderer.drawText(self.title, {'x': 50, 'y':20}, 'title', Renderer.YELLOW  )
-		for item in self.items:
-			item.render() 
+    def render(self):
+        Renderer.draw_text(
+            self.title, {'x': 50, 'y': 20}, 'title', Renderer.YELLOW)
+        for item in self.items:
+            item.render()

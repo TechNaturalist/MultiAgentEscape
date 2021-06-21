@@ -1,20 +1,22 @@
 from Renderer import Renderer
 
+
 class Guard:
-	RENDERER = Renderer.getInstance()
-	def __init__(self, debug, position):
-		self.debug = debug
-		self.position = position
-		self.sight = []
+    RENDERER = Renderer.get_instance()
 
-	def update(self):
-		return self
+    def __init__(self, debug, position):
+        self.debug = debug
+        self.position = position
+        self.sight = []
 
-	def render(self):
-		if self.debug:
-			for tile in self.sight:
-				Guard.RENDERER.colorTile( tile,  Guard.RENDERER.CORAL)
-		Guard.RENDERER.drawGuard( self.position )
+    def update(self):
+        return self
 
-	def getSight(self, tiles):
-		self.sight = tiles
+    def render(self):
+        if self.debug:
+            for tile in self.sight:
+                Guard.RENDERER.color_tile(tile,  Guard.RENDERER.CORAL)
+        Guard.RENDERER.draw_guard(self.position)
+
+    def get_sight(self, tiles):
+        self.sight = tiles
