@@ -46,7 +46,7 @@ def hear(agent, board):
                      board[x - 1][y + 1], board[x][y + 1], board[x + 1][y + 1], board[x + 2][y + 1],
                      board[x - 1][y], board[x + 1][y], board[x + 2][y],
                      board[x - 1][y - 1], board[x][y - 1], board[x + 1][y - 1], board[x + 2][y - 1],
-                     board[x - 1][y - 2], board[x][y - 2], board[x + 1][y - 2],board[x + 2][y - 2]]
+                     board[x - 1][y - 2], board[x][y - 2], board[x + 1][y - 2], board[x + 2][y - 2]]
         elif y == 0:  # Agent against bottom edge of the board
             tiles = [board[x - 1][y + 2], board[x][y + 2], board[x + 1][y + 2], board[x + 2][y + 2],
                      board[x - 1][y + 1], board[x][y + 1], board[x + 1][y + 1], board[x + 2][y + 1],
@@ -59,12 +59,12 @@ def hear(agent, board):
         elif y == len(board[x]) - 1:  # Agent against top edge of the board
             tiles = [board[x - 1][y], board[x + 1][y], board[x + 2][y],
                      board[x - 1][y - 1], board[x][y - 1], board[x + 1][y - 1], board[x + 2][y - 1],
-                     board[x - 1][y - 2], board[x][y - 2], board[x + 1][y - 2],board[x + 2][y - 2]]
+                     board[x - 1][y - 2], board[x][y - 2], board[x + 1][y - 2], board[x + 2][y - 2]]
         elif y == len(board[x]) - 2:  # Agent 1 away from top edge of the board
             tiles = [board[x - 1][y + 1], board[x][y + 1], board[x + 1][y + 1], board[x + 2][y + 1],
                      board[x - 1][y], board[x + 1][y], board[x + 2][y],
                      board[x - 1][y - 1], board[x][y - 1], board[x + 1][y - 1], board[x + 2][y - 1],
-                     board[x - 1][y - 2], board[x][y - 2], board[x + 1][y - 2],board[x + 2][y - 2]]
+                     board[x - 1][y - 2], board[x][y - 2], board[x + 1][y - 2], board[x + 2][y - 2]]
     elif x == len(board) - 1:  # Agent against right edge of the board
         if 1 < y < len(board) - 2:
             tiles = [board[x - 2][y + 2], board[x - 1][y + 2], board[x][y + 2],

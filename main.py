@@ -1,4 +1,3 @@
-
 # Game main By Dick Loveland
 
 from Input import Input
@@ -25,10 +24,8 @@ def main():
     pygame.display.set_caption(GAMECAPTION)
 
     while True:
-        #menuOptions = Menu.start()
-        menu_options = {
-            'guards': 1
-        }
+        # menuOptions = Menu.start()
+        menu_options = {'guards': 1}
         Game.start(menu_options)
 
 
