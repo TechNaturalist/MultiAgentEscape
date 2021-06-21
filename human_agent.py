@@ -1,7 +1,7 @@
 from abstract_agent import AbstractAgent
 
 
-class Player(AbstractAgent):
+class HumanAgent(AbstractAgent):
     def __init__(self, position) -> None:
         super().__init__(position)
 
