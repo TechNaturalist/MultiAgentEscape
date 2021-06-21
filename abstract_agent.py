@@ -12,6 +12,10 @@ KNIFE = 4
 GUN = 6
 BANANA = 9000
 
+<<<<<<< HEAD
+=======
+#stash move
+>>>>>>> origin/dick
 
 class AbstractAgent(ABC):
     def __init__(self, position) -> None:

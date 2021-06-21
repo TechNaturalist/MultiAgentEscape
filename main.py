@@ -1,9 +1,10 @@
 # Game main By Dick Loveland
 
 import random, pygame, sys, math, time
+import Menu, Game
 from pygame.locals import *
-from Renderer import Renderer
 
+<<<<<<< HEAD
 FPS = 5
 WINDOWWIDTH = 640
 WINDOWHEIGHT = 640
@@ -24,21 +25,25 @@ GRAY = (100, 100, 100)
 PURPLE = (155, 0, 155)
 YELLOW = (255, 255, 0)
 BGCOLOR = BLACK
+=======
 
-UP = 'up'
-LEFT = 'left'
-RIGHT = 'right'
-SHOOT = 'shoot'
-GRAB = 'grab'
-RELEASE = 'release'
-DOWN = 'down'
+>>>>>>> origin/dick
 
-theInput = ''
+import Helper
+Helper.startAll()
 
+from Renderer import Renderer
+from Input import Input
+
+
+GAMECAPTION = 'Group 9: Final Project'
+
+FPS = 30
 renderList = []
 
 
 def main():
+<<<<<<< HEAD
     global FPSCLOCK, DISPLAYSURF, BASICFONT, RENDERER
 
     pygame.init()
@@ -114,6 +119,17 @@ def checkForKeyPress():
 def terminate():
     pygame.quit()
     sys.exit()
+=======
+
+	pygame.display.set_caption(GAMECAPTION)
+
+	while True:
+		#menuOptions = Menu.start()
+		menuOptions = {
+			'guards': 1
+		}
+		Game.start(menuOptions)
+>>>>>>> origin/dick
 
 
 if __name__ == '__main__':
