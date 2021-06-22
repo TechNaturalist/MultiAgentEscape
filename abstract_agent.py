@@ -4,7 +4,8 @@ from player import Player
 from player_agent import PlayerAgent
 from guard_agent import GuardAgent
 from tile import Tile
-from typing import List, Union
+from typing import List, Tuple, Union
+from Renderer import Renderer
 import random
 
 FISTS = 2
@@ -14,7 +15,9 @@ BANANA = 9000
 
 
 class AbstractAgent(ABC):
-    def __init__(self, position: Tile) -> None:
+    RENDERER = Renderer.get_instance()
+
+    def __init__(self, position: Tuple[int, int]) -> None:
         self.position = position
         self.hp = 10
         self.total_hp = 10

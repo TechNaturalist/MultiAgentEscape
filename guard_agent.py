@@ -1,6 +1,6 @@
 import random
 from tile import Tile
-from typing import List
+from typing import List, Tuple
 from coalition import Coalition
 from abstract_agent import AbstractAgent
 from Renderer import Renderer
@@ -13,9 +13,7 @@ attitude = {
 
 
 class GuardAgent(AbstractAgent):
-    RENDERER = Renderer.get_instance()
-
-    def __init__(self, position) -> None:
+    def __init__(self, position: Tuple[int, int]) -> None:
         super().__init__(position)
         self.coalition: Coalition
         self.skill = random.randint(1, 5)
@@ -28,6 +26,6 @@ class GuardAgent(AbstractAgent):
 
     def render(self, board: List[List[Tile]]):
         if self.debug:
-            for tile in self.look_around():
-                self.RENDERER.color_tile(tile,  self.RENDERER.CORAL)
-        self.RENDERER.draw_guard(self.position)
+            for tile in self.look_around(board):
+                self.RENDERER.color_tile(tile, self.RENDERER.DARKGRAY)
+        self.RENDERER.draw_guard(self)

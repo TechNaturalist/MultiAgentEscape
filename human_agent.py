@@ -1,3 +1,5 @@
+from tile import Tile
+from typing import List
 from abstract_agent import AbstractAgent
 
 
@@ -9,8 +11,11 @@ class HumanAgent(AbstractAgent):
         """Get the current player movement from pygame. Not necessary when an agent player is playing."""
         pass
 
-    def update(self, inputs):
-        pass
+    def update(self):
+        return self
 
-    def render(self):
-        pass
+    def render(self, board: List[List[Tile]]):
+        if self.debug:
+            for tile in self.look_around(board):
+                self.RENDERER.color_tile(tile, self.RENDERER.WHITE)
+        self.RENDERER.draw_player(self)
