@@ -28,6 +28,7 @@ class Renderer:
     # R    G    B
     WHITE = (255, 255, 255)
     BLACK = (0,   0,   0)
+    BLUE = (0,   0, 255)
     GREEN = (0, 255,   0)
     DARKGREEN = (0, 155,   0)
     DARKGRAY = (40,  40,  40)
@@ -83,7 +84,7 @@ class Renderer:
         xcenter = guard.position[0] * CELLSIZE + math.floor(CELLSIZE/2)
         ycenter = guard.position[1] * CELLSIZE + math.floor(CELLSIZE/2)
         pygame.draw.circle(self.display,
-                           Renderer.RED,
+                           Renderer.BLUE,
                            (xcenter, ycenter),
                            RADIUS)
 
@@ -114,6 +115,17 @@ class Renderer:
 
     def finish_rendering(self):
         pygame.display.update()
+
+    def draw_tile(self, tile):
+        if tile.is_wall:
+            self.color_tile(tile, self.WHITE)
+        elif tile.is_exit:
+            self.color_tile(tile, self.YELLOW)
+        elif tile.agent is not None:
+            if tile.is_player:
+                self.draw_player(tile.agent)
+            else:
+                self.draw_guard(tile.agent)
 
 
 def width(x):

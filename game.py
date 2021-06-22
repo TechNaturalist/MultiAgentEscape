@@ -3,6 +3,7 @@ from tile import Tile
 from input import Input
 from renderer import Renderer
 from maps import Map1, Map2
+from percept import see, hear
 
 if TYPE_CHECKING:
     from human_agent import HumanAgent
@@ -42,14 +43,21 @@ def game_init(options):
     # player = PlayerAgent((12, 12))
     #
     # board = tile.create_board(BOARD_WIDTH, walls, guards, player)
+    # guards = Map1.guards
+    # player = Map1.player
+    # walls = Map1.walls
+    # board = create_board(Map1.size, Map1.walls, Map1.guards, Map1.player, Map1.door)
 
-    board = create_board(Map1.size, Map1.walls, Map1.guards, Map1.player, Map1.door)
-    # board = tile.create_board(Map2.size, Map2.walls, Map2.guards, Map2.player, Map2.door)
+    guards = Map2.guards
+    player = Map2.player
+    walls = Map2.walls
+    board = create_board(Map2.size, Map2.walls, Map2.guards, Map2.player, Map2.door)
 
 
 def update(inputs):
     global render_list
-    render_list = []
+    if player is not None:
+        render_list = see(player, board)
 
     # for guard in guards:
     #     guard.getSight(get_percepts(guard))
@@ -61,162 +69,25 @@ def update(inputs):
 def render():
     RENDERER.game_background()
     for sprite in render_list:
-        sprite.render()
+        RENDERER.draw_tile(sprite)
 
     RENDERER.draw_grid()
     RENDERER.finish_rendering()
 
 
-def get_percepts(sprite):
-    percepts = []
-
-    percepts.append(board[sprite.position['x']][sprite.position['y']])
-    # Adjacent Tiles
-    try:
-        percepts.append(board[sprite.position['x'] - 1]
-                        [sprite.position['y'] - 1])
-    except IndexError:
-        pass
-
-    try:
-        percepts.append(board[sprite.position['x'] - 1]
-                        [sprite.position['y']])
-    except IndexError:
-        pass
-
-    try:
-        percepts.append(board[sprite.position['x'] - 1]
-                        [sprite.position['y'] + 1])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x']]
-                        [sprite.position['y'] - 1])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] - 0]
-                        [sprite.position['y'] + 1])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] + 1]
-                        [sprite.position['y'] - 1])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] + 1]
-                        [sprite.position['y'] - 0])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] + 1]
-                        [sprite.position['y'] + 1])
-    except IndexError:
-        pass
-
-    # Non adjecent tiles
-    try:
-        percepts.append(board[sprite.position['x'] - 2]
-                        [sprite.position['y'] - 2])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] - 2]
-                        [sprite.position['y'] - 1])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] - 2]
-                        [sprite.position['y'] - 0])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] - 2]
-                        [sprite.position['y'] + 1])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] - 2]
-                        [sprite.position['y'] + 2])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] - 2]
-                        [sprite.position['y'] - 1])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] - 1]
-                        [sprite.position['y'] - 2])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] - 1]
-                        [sprite.position['y'] + 2])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] - 0]
-                        [sprite.position['y'] - 2])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] - 0]
-                        [sprite.position['y'] + 2])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] + 1]
-                        [sprite.position['y'] - 2])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] + 1]
-                        [sprite.position['y'] + 2])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] + 2]
-                        [sprite.position['y'] - 2])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] + 2]
-                        [sprite.position['y'] - 1])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] + 2]
-                        [sprite.position['y'] - 0])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] + 2]
-                        [sprite.position['y'] + 1])
-    except IndexError:
-        pass
-    try:
-        percepts.append(board[sprite.position['x'] + 2]
-                        [sprite.position['y'] + 2])
-    except IndexError:
-        pass
-
-    return percepts
-
-
 def create_board(board_width, walls, guards, player, door):
-    board = [[Tile((x, y)) for x in range(board_width)]
-             for y in range(board_width)]
+    game_board = [[Tile((x, y)) for y in range(board_width)]
+                  for x in range(board_width)]
 
     for wall in walls:
-        board[wall[0]][wall[1]].is_wall = True
+        game_board[wall[0]][wall[1]].is_wall = True
 
     for guard in guards:
-        board[guard.position[0]][guard.position[1]].set_agent(guard)
+        game_board[guard.position[0]][guard.position[1]].set_agent(guard)
 
-    board[player.position[0]][player.position[1]].set_agent(player)
+    game_board[player.position[0]][player.position[1]].set_agent(player)
+    game_board[player.position[0]][player.position[1]].is_player = True
 
-    board[door[0]][door[1]].is_exit = True
+    game_board[door[0]][door[1]].is_exit = True
 
-    return board
+    return game_board
