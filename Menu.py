@@ -1,8 +1,8 @@
 import pygame
 from pygame.locals import *
-from Renderer import Renderer
-from Input import Input
-from MainMenu import MainMenu
+from renderer import Renderer
+from input import Input
+from main_menu import MainMenu
 
 # Syntactic Sugar
 FIRST = 0

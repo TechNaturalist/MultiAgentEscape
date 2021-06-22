@@ -1,11 +1,16 @@
-import pygame
-from pygame.locals import *
-from Input import Input
-from Renderer import Renderer
-from Guard import Guard
+from player_agent import PlayerAgent
+from guard_agent import GuardAgent
+import tile
+from input import Input
+from renderer import Renderer
 
 render_list = []
-game_map = []
+board = []
+guards = []
+walls = []
+player = None
+
+BOARD_WIDTH = 20
 
 
 def start(options):
@@ -25,29 +30,22 @@ def start(options):
 
 
 def game_init(options):
-    global guards, game_map
+    global guards, board, player, walls
 
-    guards = []
+    walls = [(10, 10)]
+    guards = [GuardAgent((11, 11))]
+    player = PlayerAgent((12, 12))
 
-    for i in range(options['guards']):
-        guards.append(Guard(True, {'x': 4, 'y': 4}))
-
-    game_map = []
-    # Creating a map (need to automate)
-    for i in range(20):
-        tmp = []
-        for j in range(20):
-            tmp.append({'x': i, 'y': j})
-        game_map.append(tmp)
+    board = tile.create_board(BOARD_WIDTH, walls, guards, player)
 
 
 def update(inputs):
     global render_list
     render_list = []
 
-    for guard in guards:
-        guard.getSight(get_percepts(guard))
-        render_list.append(guard.update())
+    # for guard in guards:
+    #     guard.getSight(get_percepts(guard))
+    #     render_list.append(guard.update())
 
     return False
 
@@ -64,134 +62,134 @@ def render():
 def get_percepts(sprite):
     percepts = []
 
-    percepts.append(game_map[sprite.position['x']][sprite.position['y']])
+    percepts.append(board[sprite.position['x']][sprite.position['y']])
     # Adjacent Tiles
     try:
-        percepts.append(game_map[sprite.position['x'] - 1]
+        percepts.append(board[sprite.position['x'] - 1]
                         [sprite.position['y'] - 1])
     except IndexError:
         pass
 
     try:
-        percepts.append(game_map[sprite.position['x'] - 1]
+        percepts.append(board[sprite.position['x'] - 1]
                         [sprite.position['y']])
     except IndexError:
         pass
 
     try:
-        percepts.append(game_map[sprite.position['x'] - 1]
+        percepts.append(board[sprite.position['x'] - 1]
                         [sprite.position['y'] + 1])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x']]
+        percepts.append(board[sprite.position['x']]
                         [sprite.position['y'] - 1])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] - 0]
+        percepts.append(board[sprite.position['x'] - 0]
                         [sprite.position['y'] + 1])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] + 1]
+        percepts.append(board[sprite.position['x'] + 1]
                         [sprite.position['y'] - 1])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] + 1]
+        percepts.append(board[sprite.position['x'] + 1]
                         [sprite.position['y'] - 0])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] + 1]
+        percepts.append(board[sprite.position['x'] + 1]
                         [sprite.position['y'] + 1])
     except IndexError:
         pass
 
     # Non adjecent tiles
     try:
-        percepts.append(game_map[sprite.position['x'] - 2]
+        percepts.append(board[sprite.position['x'] - 2]
                         [sprite.position['y'] - 2])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] - 2]
+        percepts.append(board[sprite.position['x'] - 2]
                         [sprite.position['y'] - 1])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] - 2]
+        percepts.append(board[sprite.position['x'] - 2]
                         [sprite.position['y'] - 0])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] - 2]
+        percepts.append(board[sprite.position['x'] - 2]
                         [sprite.position['y'] + 1])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] - 2]
+        percepts.append(board[sprite.position['x'] - 2]
                         [sprite.position['y'] + 2])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] - 2]
+        percepts.append(board[sprite.position['x'] - 2]
                         [sprite.position['y'] - 1])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] - 1]
+        percepts.append(board[sprite.position['x'] - 1]
                         [sprite.position['y'] - 2])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] - 1]
+        percepts.append(board[sprite.position['x'] - 1]
                         [sprite.position['y'] + 2])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] - 0]
+        percepts.append(board[sprite.position['x'] - 0]
                         [sprite.position['y'] - 2])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] - 0]
+        percepts.append(board[sprite.position['x'] - 0]
                         [sprite.position['y'] + 2])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] + 1]
+        percepts.append(board[sprite.position['x'] + 1]
                         [sprite.position['y'] - 2])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] + 1]
+        percepts.append(board[sprite.position['x'] + 1]
                         [sprite.position['y'] + 2])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] + 2]
+        percepts.append(board[sprite.position['x'] + 2]
                         [sprite.position['y'] - 2])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] + 2]
+        percepts.append(board[sprite.position['x'] + 2]
                         [sprite.position['y'] - 1])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] + 2]
+        percepts.append(board[sprite.position['x'] + 2]
                         [sprite.position['y'] - 0])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] + 2]
+        percepts.append(board[sprite.position['x'] + 2]
                         [sprite.position['y'] + 1])
     except IndexError:
         pass
     try:
-        percepts.append(game_map[sprite.position['x'] + 2]
+        percepts.append(board[sprite.position['x'] + 2]
                         [sprite.position['y'] + 2])
     except IndexError:
         pass

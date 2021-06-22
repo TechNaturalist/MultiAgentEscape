@@ -1,14 +1,16 @@
 from tile import Tile
-from typing import List, Tuple
-from abstract_agent import AbstractAgent, KNIFE
+from typing import List
+from abstract_agent import AbstractAgent
 
 
-class PlayerAgent(AbstractAgent):
-
-    def __init__(self, position: Tuple[int, int]) -> None:
+class HumanAgent(AbstractAgent):
+    def __init__(self, position) -> None:
         super().__init__(position)
-        self.gold = 100
-        self.weapon = KNIFE
+
+    def get_movement(self):
+        """Get the current player movement from pygame. Not necessary when an
+        agent player is playing."""
+        pass
 
     def update(self):
         return self

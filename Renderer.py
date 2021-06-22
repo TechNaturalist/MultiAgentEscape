@@ -1,7 +1,10 @@
-from typing import Optional, Tuple, Union
+from human_agent import HumanAgent
+from player_agent import PlayerAgent
+from guard_agent import GuardAgent
+from tile import Tile
+from typing import Literal, Tuple, Union
 import pygame
 import math
-from pygame.locals import *
 
 WIDTH = 640
 HEIGHT = 640
@@ -19,7 +22,7 @@ class Renderer:
 
     __instance = None
 
-    #		R    G    B
+    # R    G    B
     WHITE = (255, 255, 255)
     BLACK = (0,   0,   0)
     GREEN = (0, 255,   0)
@@ -50,9 +53,13 @@ class Renderer:
 
     def draw_text(self,
                   text: str,
-                  center: dict,
+                  center: dict[str, int],
                   font: str,
-                  color: Union[int, Tuple[int, int, int, Optional[int]]]):
+                  color: Union[int,
+                               Tuple[int, int, int],
+                               Tuple[Literal,
+                                     Literal,
+                                     Literal]]):
         if (font == 'basic'):
             surf = self.BASICFONT.render(text, True, color)
             rect = surf.get_rect()
@@ -69,25 +76,44 @@ class Renderer:
             raise NotImplementedError
         self.display.blit(surf, rect)
 
-    def draw_guard(self, position: dict):
-        xcenter = position['x'] * CELLSIZE + math.floor(CELLSIZE/2)
-        ycenter = position['y'] * CELLSIZE + math.floor(CELLSIZE/2)
-        pygame.draw.circle(self.display, Renderer.RED,
-                           (xcenter, ycenter), RADIUS)
+    def draw_guard(self, guard: GuardAgent):
+        xcenter = guard.position[0] * CELLSIZE + math.floor(CELLSIZE/2)
+        ycenter = guard.position[1] * CELLSIZE + math.floor(CELLSIZE/2)
+        pygame.draw.circle(self.display,
+                           Renderer.RED,
+                           (xcenter, ycenter),
+                           RADIUS)
+
+    def draw_player(self, guard: Union[PlayerAgent, HumanAgent]):
+        xcenter = guard.position[0] * CELLSIZE + math.floor(CELLSIZE/2)
+        ycenter = guard.position[1] * CELLSIZE + math.floor(CELLSIZE/2)
+        pygame.draw.circle(self.display,
+                           Renderer.RED,
+                           (xcenter, ycenter),
+                           RADIUS)
 
     def draw_grid(self):
         for x in range(0, WIDTH, CELLSIZE):
-            pygame.draw.line(self.display, Renderer.BGCOLOR,
-                             (x, 0), (x, HEIGHT))
+            pygame.draw.line(self.display,
+                             Renderer.BGCOLOR,
+                             (x, 0),
+                             (x, HEIGHT))
+
         for y in range(0, HEIGHT, CELLSIZE):
-            pygame.draw.line(self.display, Renderer.BGCOLOR,
-                             (0, y), (WIDTH, y))
+            pygame.draw.line(self.display,
+                             Renderer.BGCOLOR,
+                             (0, y),
+                             (WIDTH, y))
 
     def color_tile(self,
-                   tile: dict,
-                   color: Union[int, Tuple[int, int, int, Optional[int]]]):
-        x = tile['x'] * CELLSIZE
-        y = tile['y'] * CELLSIZE
+                   tile: Tile,
+                   color: Union[int,
+                                Tuple[int, int, int],
+                                Tuple[Literal,
+                                      Literal,
+                                      Literal]]):
+        x = tile.position[0] * CELLSIZE
+        y = tile.position[1] * CELLSIZE
         tile_rect = pygame.Rect(x, y, CELLSIZE, CELLSIZE)
         pygame.draw.rect(self.display, color, tile_rect)
 
