@@ -2,7 +2,6 @@ from typing import List, Tuple, Union
 from abstract_agent import AbstractAgent
 import numpy as np
 from random import randint, random
-from fractions import Fraction
 
 
 BRIBE_AMOUNT = 25
