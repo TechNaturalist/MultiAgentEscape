@@ -1,6 +1,8 @@
-from typing import Tuple
+from typing import List, Tuple
 from abstract_agent import AbstractAgent
 import numpy as np
+from random import randint, random
+from fractions import Fraction
 
 
 BRIBE_AMOUNT = 25
@@ -22,15 +24,13 @@ def bribe(player: AbstractAgent, agent: AbstractAgent)\
     return player, agent
 
 
-def solve_matrix(matrix):
+def mixed_strategy_2x2(matrix: List[List[Tuple[int, int]]]):
     """Solve using mixed strategy algorithm from
     https://www3.nd.edu/~apilking/Math10120/Lectures/Topic%2029.pdf
     Page 3
 
-    Also checks for dominant strategies
-
     Args:
-        matrix (np.array): An np array of the matrix
+        matrix (List[List[Tuple[int, int]]]): An array of the matrix
         in [[(1,2),(3,4)],[(5,6),(7,8)]] format
 
     Returns:
@@ -56,19 +56,76 @@ def solve_matrix(matrix):
     if (r_a - r_b - r_c + r_d) != 0:
         q = (r_d - r_c)/(r_a - r_b - r_c + r_d)
 
-    if p is None or q is None:
-        return (0, 0)
-    elif 0 <= p <= 1 and 0 <= q <= 1:
-        return (p, q)
+    return (p, q)
+
+
+def pure_strategy_2x2(matrix):
+    col_strategies = []
+    row_strategies = []
+
+    for i in range(2):
+        col = [matrix[0][i], matrix[1][i]]
+        p2_max = max(col, key=lambda x: x[0])
+
+        row = [matrix[i][0], matrix[i][1]]
+        p1_max = max(row, key=lambda y: y[1])
+
+        for index in range(2):
+            if col[index][0] == p2_max[0]:
+                col_strategies.append((index, i))
+
+            if row[index][1] == p1_max[1]:
+                row_strategies.append((i, index))
+
+    result = list(set(col_strategies).intersection(set(row_strategies)))
+
+    return result
+
+
+def get_p_q(matrix):
+    mixed_p, mixed_q = mixed_strategy_2x2(matrix)
+    pure_solution = pure_strategy_2x2(matrix)
+
+    if len(pure_solution) == 1:
+        p = pure_solution[0][1]
+        q = pure_solution[0][0]
+    elif mixed_p is None and mixed_q is None:
+        p = random()
+        q = random()
+    elif mixed_p is not None and mixed_q is None:
+        p = mixed_p
+        q = random()
+    elif mixed_p is None and mixed_q is not None:
+        p = random()
+        q = mixed_q
+    elif 0 <= mixed_p <= 1 and 0 <= mixed_q <= 1:
+        p = mixed_p
+        q = mixed_q
+    elif len(pure_solution) == 2:
+        first = matrix[pure_solution[0][0]][pure_solution[0][1]]
+        second = matrix[pure_solution[1][0]][pure_solution[1][1]]
+        if sum(first) > sum(second):
+            p = pure_solution[0][0]
+            q = pure_solution[0][1]
+        else:
+            p = pure_solution[1][0]
+            q = pure_solution[1][1]
     else:
-        pass
+        raise NotImplementedError
+
+    return p, q
 
 
 def matrix_test():
     matrix = [[(1, 2), (3, 4)], [(5, 6), (7, 8)]]
-    print(solve_matrix(matrix))
-    matrix = [[(5, 2), (3, 2)], [(1, 2), (3, 5)]]
-    print(solve_matrix(matrix))
+    result = pure_strategy_2x2(matrix)
+    print(result)
+
+    for _ in range(1000):
+        matrix = [[(randint(0, 9), randint(0, 9)), (randint(0, 9), randint(0, 9))],
+                  [(randint(0, 9), randint(0, 9)), (randint(0, 9), randint(0, 9))]]
+
+        get_p_q(matrix)
 
 
 if __name__ == '__main__':
