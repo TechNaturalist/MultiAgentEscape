@@ -1,10 +1,8 @@
 from player_agent import PlayerAgent
 from guard_agent import GuardAgent
 import tile
-import pygame
-from pygame.locals import *
-from Input import Input
-from Renderer import Renderer
+from input import Input
+from renderer import Renderer
 
 render_list = []
 board = []

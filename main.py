@@ -1,21 +1,13 @@
 # Game main By Dick Loveland
 
-from Input import Input
-from Renderer import Renderer
-import random
 import pygame
-import sys
-import math
-import time
-import Menu
-import Game
+import helper
+import game
 from pygame.locals import *
-import Helper
-Helper.start_all()
 
+helper.start_all()
 
 GAMECAPTION = 'Group 9: Final Project'
-
 FPS = 30
 render_list = []
 
@@ -26,7 +18,7 @@ def main():
     while True:
         # menuOptions = Menu.start()
         menu_options = {'guards': 1}
-        Game.start(menu_options)
+        game.start(menu_options)
 
 
 if __name__ == '__main__':

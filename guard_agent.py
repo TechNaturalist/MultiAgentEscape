@@ -3,7 +3,6 @@ from tile import Tile
 from typing import List, Tuple
 from coalition import Coalition
 from abstract_agent import AbstractAgent
-from Renderer import Renderer
 
 attitude = {
     'nice': 5,

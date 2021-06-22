@@ -8,7 +8,8 @@ class HumanAgent(AbstractAgent):
         super().__init__(position)
 
     def get_movement(self):
-        """Get the current player movement from pygame. Not necessary when an agent player is playing."""
+        """Get the current player movement from pygame. Not necessary when an
+        agent player is playing."""
         pass
 
     def update(self):

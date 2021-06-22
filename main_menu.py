@@ -1,14 +1,14 @@
-from Renderer import Renderer
-from Input import Input
-import Helper
+from renderer import Renderer
+from input import Input
+import helper
 
-Renderer = Renderer.get_instance()
-Input = Input.get_instance()
+renderer = Renderer.get_instance()
+input = Input.get_instance()
 
 STATEMACHINE = ['play', 'options', 'help', 'about']
 
 
-## Helper Class for organization ##
+# Helper Class for organization #
 
 class MainMenuItem:
     def __init__(self, text, center, size, highlighted):
@@ -19,12 +19,12 @@ class MainMenuItem:
 
     def render(self):
         if not self.highlighted:
-            Renderer.draw_text(self.text, self.center, 'menu', Renderer.WHITE)
+            renderer.draw_text(self.text, self.center, 'menu', Renderer.WHITE)
         else:
-            Renderer.draw_text(self.text, self.center, 'menu', Renderer.GREEN)
+            renderer.draw_text(self.text, self.center, 'menu', Renderer.GREEN)
 
 
-## Main Class ##
+# Main Class #
 
 class MainMenu:
     def __init__(self):
@@ -45,7 +45,7 @@ class MainMenu:
             if (inputs['keys'][0] == 'enter'):
                 self.enter()
             elif (inputs['keys'][0] == 'back'):
-                Helper.terminate()
+                helper.terminate()
             else:
                 self.change_state(inputs)
         return options
@@ -78,7 +78,10 @@ class MainMenu:
             pass
 
     def render(self):
-        Renderer.draw_text(
-            self.title, {'x': 50, 'y': 20}, 'title', Renderer.YELLOW)
+        renderer.draw_text(
+            self.title,
+            {'x': 50, 'y': 20},
+            'title',
+            Renderer.YELLOW)
         for item in self.items:
             item.render()

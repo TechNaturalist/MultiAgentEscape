@@ -1,12 +1,11 @@
 from abc import ABC, abstractmethod
 from dice import roll_dice
-from player import Player
+from human_agent import HumanAgent
 from player_agent import PlayerAgent
 from guard_agent import GuardAgent
 from tile import Tile
 from typing import List, Tuple, Union
-from Renderer import Renderer
-import random
+from renderer import Renderer
 
 FISTS = 2
 KNIFE = 4
@@ -28,24 +27,28 @@ class AbstractAgent(ABC):
         self.defence = 12
         self.debug = False
 
-    def look_around(self, board: List[List[Tile]]) -> List[Tile]:
+    def look_around(self, board: List[List[Tile]]) -> Union[List[Tile], None]:
         """Looks around and returns a 2D array of tiles around"""
         # TODO: Add look around code
-        pass
+        return None
 
-    def listen(self) -> List[Tile]:
+    def listen(self) -> Union[List[Tile], None]:
         """Listens and returns a 2D array of objects heard"""
         # TODO: Add listen code
         pass
 
-    def fight(self, agent: Union[GuardAgent, PlayerAgent, Player]) -> Union[GuardAgent, PlayerAgent, Player]:
+    def fight(self,
+              agent: Union[GuardAgent, PlayerAgent, HumanAgent])\
+            -> Union[GuardAgent, PlayerAgent, HumanAgent]:
         """Fight another agent
 
         Args:
-            agent (Union[GuardAgent, PlayerAgent, Player]): The agent this agent is fighting against
+            agent (Union[GuardAgent, PlayerAgent, Player]): The agent
+            this agent is fighting against
 
         Returns:
-            Union[GuardAgent, PlayerAgent, Player]: The agent fought and any damage/death done
+            Union[GuardAgent, PlayerAgent, Player]: The agent fought and any
+            damage/death done
         """
 
         # TODO: Add fight code
