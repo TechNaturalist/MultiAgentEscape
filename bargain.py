@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, Union
 from abstract_agent import AbstractAgent
 import numpy as np
 from random import randint, random
@@ -24,7 +24,8 @@ def bribe(player: AbstractAgent, agent: AbstractAgent)\
     return player, agent
 
 
-def mixed_strategy_2x2(matrix: List[List[Tuple[int, int]]]):
+def mixed_strategy_2x2(matrix: List[List[Tuple[int, int]]]) \
+        -> Tuple[Union[float, None], Union[float, None]]:
     """Solve using mixed strategy algorithm from
     https://www3.nd.edu/~apilking/Math10120/Lectures/Topic%2029.pdf
     Page 3
@@ -59,36 +60,49 @@ def mixed_strategy_2x2(matrix: List[List[Tuple[int, int]]]):
     return (p, q)
 
 
-def pure_strategy_2x2(matrix):
+def pure_strategy_2x2(matrix: List[List[tuple[int, int]]]) \
+        -> List[tuple[int, int]]:
     col_strategies = []
     row_strategies = []
 
     for i in range(2):
+        # Grab the entries in the current column
         col = [matrix[0][i], matrix[1][i]]
-        p2_max = max(col, key=lambda x: x[0])
+        # Find the entry with the maximum value for p1
+        p1_max = max(col, key=lambda x: x[0])
 
+        # Grab the entries in the current row
         row = [matrix[i][0], matrix[i][1]]
-        p1_max = max(row, key=lambda y: y[1])
+        # Find the entry with the maximum value for p12
+        p2_max = max(row, key=lambda y: y[1])
 
         for index in range(2):
-            if col[index][0] == p2_max[0]:
+            if col[index][0] == p1_max[0]:
+                # If a column value equals the maximum, add it
                 col_strategies.append((index, i))
 
-            if row[index][1] == p1_max[1]:
+            if row[index][1] == p2_max[1]:
+                # If a row value equals the maximum, add it
                 row_strategies.append((i, index))
 
+    # The pure strategies will be the overlap of the column and
+    # row strategies
     result = list(set(col_strategies).intersection(set(row_strategies)))
 
     return result
 
 
-def get_p_q(matrix):
+def get_p_q(matrix: List[List[tuple[int, int]]]) \
+        -> tuple[float, float]:
     mixed_p, mixed_q = mixed_strategy_2x2(matrix)
     pure_solution = pure_strategy_2x2(matrix)
 
+    # If we have a single pure solution, use it
     if len(pure_solution) == 1:
         p = pure_solution[0][1]
         q = pure_solution[0][0]
+    # If any mixed number is None, use a random p/q
+    # from 0-1
     elif mixed_p is None and mixed_q is None:
         p = random()
         q = random()
@@ -98,9 +112,14 @@ def get_p_q(matrix):
     elif mixed_p is None and mixed_q is not None:
         p = random()
         q = mixed_q
-    elif 0 <= mixed_p <= 1 and 0 <= mixed_q <= 1:
+    # If we have a valid set of mixed solutions, use them
+    elif mixed_p is not None and mixed_q is not None and \
+            0 <= mixed_p <= 1 and 0 <= mixed_q <= 1:
         p = mixed_p
         q = mixed_q
+    # If we have two pure solutions and bad mixed solutions,
+    # we have a strategy we can remove. We can find it by
+    # removing the solution with the least social welfare
     elif len(pure_solution) == 2:
         first = matrix[pure_solution[0][0]][pure_solution[0][1]]
         second = matrix[pure_solution[1][0]][pure_solution[1][1]]
@@ -110,6 +129,7 @@ def get_p_q(matrix):
         else:
             p = pure_solution[1][0]
             q = pure_solution[1][1]
+    # Catch any issues/unresolved values here
     else:
         raise NotImplementedError
 
@@ -119,13 +139,16 @@ def get_p_q(matrix):
 def matrix_test():
     matrix = [[(1, 2), (3, 4)], [(5, 6), (7, 8)]]
     result = pure_strategy_2x2(matrix)
-    print(result)
+    assert matrix[result[0][0]][result[0][1]] == (7, 8)
 
     for _ in range(1000):
-        matrix = [[(randint(0, 9), randint(0, 9)), (randint(0, 9), randint(0, 9))],
-                  [(randint(0, 9), randint(0, 9)), (randint(0, 9), randint(0, 9))]]
+        matrix = [[(randint(0, 9), randint(0, 9)),
+                   (randint(0, 9), randint(0, 9))],
+                  [(randint(0, 9), randint(0, 9)),
+                  (randint(0, 9), randint(0, 9))]]
 
-        get_p_q(matrix)
+        p, q = get_p_q(matrix)
+        print(p, q)
 
 
 if __name__ == '__main__':

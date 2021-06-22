@@ -37,7 +37,7 @@ class Input:
     def get_keys(self):
         for event in pygame.event.get():
             if (event.type == pygame.QUIT):
-                Helper.terminate()
+                helper.terminate()
             if (event.type == KEYDOWN):
                 if (event.key == self.map["up"]):
                     self.keys.append('up')
