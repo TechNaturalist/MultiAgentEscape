@@ -1,4 +1,3 @@
-from tile import Tile
 from typing import List
 from abstract_agent import AbstractAgent
 
@@ -15,7 +14,7 @@ class HumanAgent(AbstractAgent):
     def update(self):
         return self
 
-    def render(self, board: List[List[Tile]]):
+    def render(self, board):
         if self.debug:
             for tile in self.look_around(board):
                 self.RENDERER.color_tile(tile, self.RENDERER.WHITE)

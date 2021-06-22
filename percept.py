@@ -1,11 +1,10 @@
 
 # Returns what tiles on the board the agent can hear
-from abstract_agent import AbstractAgent
 from typing import List
 from tile import Tile
 
 
-def hear(agent: AbstractAgent, board: List[List[Tile]]) -> List[Tile]:
+def hear(agent, board: List[List[Tile]]) -> List[Tile]:
     x = agent.position[0]
     y = agent.position[1]
     tiles = []
@@ -120,7 +119,7 @@ def hear(agent: AbstractAgent, board: List[List[Tile]]) -> List[Tile]:
 
 
 # Returns what tiles on the board the agent can see
-def see(agent: AbstractAgent, board: List[List[Tile]]) -> List[Tile]:
+def see(agent, board: List[List[Tile]]) -> List[Tile]:
     x = agent.position[0]
     y = agent.position[1]
     tiles = []

@@ -1,7 +1,7 @@
 import pygame
 from pygame.locals import K_w, K_s, K_a, K_d, KEYDOWN, K_ESCAPE, K_RETURN
 
-import helper
+import Helper
 
 defaults = {
     "up": K_w,
@@ -37,7 +37,7 @@ class Input:
     def get_keys(self):
         for event in pygame.event.get():
             if (event.type == pygame.QUIT):
-                helper.terminate()
+                Helper.terminate()
             if (event.type == KEYDOWN):
                 if (event.key == self.map["up"]):
                     self.keys.append('up')
