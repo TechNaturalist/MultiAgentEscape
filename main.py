@@ -1,10 +1,10 @@
 # Game main By Dick Loveland
 
 import pygame
-import Helper
-import Game
+import helper
+import game
 
-Helper.start_all()
+helper.start_all()
 
 GAMECAPTION = 'Group 9: Final Project'
 FPS = 30
@@ -17,7 +17,7 @@ def main():
     while True:
         # menuOptions = Menu.start()
         menu_options = {'guards': 3}
-        Game.start(menu_options)
+        game.start(menu_options)
 
 
 if __name__ == '__main__':
