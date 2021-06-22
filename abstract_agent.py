@@ -4,6 +4,7 @@ from dice import roll_dice
 from tile import Tile
 from typing import List, TYPE_CHECKING, Tuple, Union
 from renderer import Renderer
+from percept import see, hear
 
 
 FISTS = 2
@@ -31,19 +32,17 @@ class AbstractAgent(ABC):
         self.defence = 12
         self.debug = False
 
-    def look_around(self, board: List[List[Tile]]) -> Union[List[Tile], None]:
+    def look_around(self, board):
         """Looks around and returns a 2D array of tiles around"""
         # TODO: Add look around code
-        return None
+        return see(self, board)
 
-    def listen(self) -> Union[List[Tile], None]:
+    def listen(self, board):
         """Listens and returns a 2D array of objects heard"""
         # TODO: Add listen code
-        pass
+        return hear(self, board)
 
-    def fight(self,
-              agent: Union[GuardAgent, PlayerAgent, HumanAgent])\
-            -> Union[GuardAgent, PlayerAgent, HumanAgent]:
+    def fight(self, agent):
         """Fight another agent
 
         Args:
@@ -76,7 +75,7 @@ class AbstractAgent(ABC):
         """Take damage and calculate death
 
         Args:
-            damage (int): The damge done to self
+            damage (int): The damage done to self
         """
         self.hp -= damage
         if self.hp <= 0:
@@ -120,5 +119,5 @@ class AbstractAgent(ABC):
         pass
 
     @abstractmethod
-    def render(self, board: List[List[Tile]]):
+    def render(self, board):
         pass

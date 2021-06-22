@@ -54,15 +54,7 @@ class Renderer:
             self.BASICFONT = pygame.font.Font('freesansbold.ttf', 18)
             Renderer.__instance = self
 
-    def draw_text(self,
-                  text: str,
-                  center: dict[str, int],
-                  font: str,
-                  color: Union[int,
-                               Tuple[int, int, int],
-                               Tuple[Literal,
-                                     Literal,
-                                     Literal]]):
+    def draw_text(self, text, center, font, color):
         if (font == 'basic'):
             surf = self.BASICFONT.render(text, True, color)
             rect = surf.get_rect()
@@ -79,7 +71,7 @@ class Renderer:
             raise NotImplementedError
         self.display.blit(surf, rect)
 
-    def draw_guard(self, guard: GuardAgent):
+    def draw_guard(self, guard):
         xcenter = guard.position[0] * CELLSIZE + math.floor(CELLSIZE/2)
         ycenter = guard.position[1] * CELLSIZE + math.floor(CELLSIZE/2)
         pygame.draw.circle(self.display,
@@ -87,7 +79,7 @@ class Renderer:
                            (xcenter, ycenter),
                            RADIUS)
 
-    def draw_player(self, guard: Union[PlayerAgent, HumanAgent]):
+    def draw_player(self, guard):
         xcenter = guard.position[0] * CELLSIZE + math.floor(CELLSIZE/2)
         ycenter = guard.position[1] * CELLSIZE + math.floor(CELLSIZE/2)
         pygame.draw.circle(self.display,
@@ -108,13 +100,7 @@ class Renderer:
                              (0, y),
                              (WIDTH, y))
 
-    def color_tile(self,
-                   tile: Tile,
-                   color: Union[int,
-                                Tuple[int, int, int],
-                                Tuple[Literal,
-                                      Literal,
-                                      Literal]]):
+    def color_tile(self, tile, color):
         x = tile.position[0] * CELLSIZE
         y = tile.position[1] * CELLSIZE
         tile_rect = pygame.Rect(x, y, CELLSIZE, CELLSIZE)

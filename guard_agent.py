@@ -17,7 +17,7 @@ attitude = {
 class GuardAgent(AbstractAgent):
     def __init__(self, position: Tuple[int, int]) -> None:
         super().__init__(position)
-        self.coalition: Coalition
+        self.coalition = None
         self.skill = random.randint(1, 5)
         self.attitude = random.choice(list(attitude.values()))
         self.is_bribed = False
@@ -26,7 +26,7 @@ class GuardAgent(AbstractAgent):
     def update(self):
         return self
 
-    def render(self, board: List[List[Tile]]):
+    def render(self, board):
         if self.debug:
             for tile in self.look_around(board):
                 self.RENDERER.color_tile(tile, self.RENDERER.DARKGRAY)

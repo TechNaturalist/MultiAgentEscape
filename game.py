@@ -1,8 +1,13 @@
-from player_agent import PlayerAgent
-from guard_agent import GuardAgent
+from typing import TYPE_CHECKING, Tuple, List, Union
 from tile import Tile
 from input import Input
 from renderer import Renderer
+from maps import Map1, Map2
+
+if TYPE_CHECKING:
+    from human_agent import HumanAgent
+    from player_agent import PlayerAgent
+    from guard_agent import GuardAgent
 
 render_list = []
 board = []
@@ -32,11 +37,14 @@ def start(options):
 def game_init(options):
     global guards, board, player, walls
 
-    walls = [(10, 10)]
-    guards = [GuardAgent((11, 11))]
-    player = PlayerAgent((12, 12))
+    # walls = [(10, 10)]
+    # guards = [GuardAgent((11, 11))]
+    # player = PlayerAgent((12, 12))
+    #
+    # board = tile.create_board(BOARD_WIDTH, walls, guards, player)
 
-    board = Tile.create_board(BOARD_WIDTH, walls, guards, player)
+    board = create_board(Map1.size, Map1.walls, Map1.guards, Map1.player, Map1.door)
+    # board = tile.create_board(Map2.size, Map2.walls, Map2.guards, Map2.player, Map2.door)
 
 
 def update(inputs):
@@ -195,3 +203,20 @@ def get_percepts(sprite):
         pass
 
     return percepts
+
+
+def create_board(board_width, walls, guards, player, door):
+    board = [[Tile((x, y)) for x in range(board_width)]
+             for y in range(board_width)]
+
+    for wall in walls:
+        board[wall[0]][wall[1]].is_wall = True
+
+    for guard in guards:
+        board[guard.position[0]][guard.position[1]].set_agent(guard)
+
+    board[player.position[0]][player.position[1]].set_agent(player)
+
+    board[door[0]][door[1]].is_exit = True
+
+    return board
