@@ -14,6 +14,8 @@ def bribe(player: AbstractAgent, agent: AbstractAgent)\
     # bribe |               gold_remaning, gold * (power - perc_power)           |        gold_remaining, bribe_gold        |  # noqa: E501
     #
 
+    
+
     if player.gold >= BRIBE_AMOUNT:
         # TODO: Calculate bribe here based on criteria
         pass

@@ -3,7 +3,6 @@
 import pygame
 import helper
 import game
-from pygame.locals import *
 
 helper.start_all()
 
