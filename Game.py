@@ -1,6 +1,6 @@
 from player_agent import PlayerAgent
 from guard_agent import GuardAgent
-import tile
+from tile import Tile
 from input import Input
 from renderer import Renderer
 
@@ -36,7 +36,7 @@ def game_init(options):
     guards = [GuardAgent((11, 11))]
     player = PlayerAgent((12, 12))
 
-    board = tile.create_board(BOARD_WIDTH, walls, guards, player)
+    board = Tile.create_board(BOARD_WIDTH, walls, guards, player)
 
 
 def update(inputs):

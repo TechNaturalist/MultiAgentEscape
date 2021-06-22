@@ -1,11 +1,10 @@
+from __future__ import annotations
 from abc import ABC, abstractmethod
 from dice import roll_dice
-from human_agent import HumanAgent
-from player_agent import PlayerAgent
-from guard_agent import GuardAgent
 from tile import Tile
-from typing import List, Tuple, Union
+from typing import List, TYPE_CHECKING, Tuple, Union
 from renderer import Renderer
+
 
 FISTS = 2
 KNIFE = 4
@@ -15,6 +14,11 @@ BANANA = 9000
 
 class AbstractAgent(ABC):
     RENDERER = Renderer.get_instance()
+
+    if TYPE_CHECKING:
+        from human_agent import HumanAgent
+        from player_agent import PlayerAgent
+        from guard_agent import GuardAgent
 
     def __init__(self, position: Tuple[int, int]) -> None:
         self.position = position

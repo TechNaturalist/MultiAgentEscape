@@ -1,8 +1,11 @@
+from __future__ import annotations
 import random
 from tile import Tile
-from typing import List, Tuple
-from coalition import Coalition
+from typing import List, TYPE_CHECKING, Tuple
 from abstract_agent import AbstractAgent
+
+if TYPE_CHECKING:
+    from coalition import Coalition
 
 attitude = {
     'nice': 5,

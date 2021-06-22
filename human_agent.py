@@ -1,3 +1,4 @@
+from __future__ import annotations
 from tile import Tile
 from typing import List
 from abstract_agent import AbstractAgent
