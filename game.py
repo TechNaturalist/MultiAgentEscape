@@ -15,6 +15,7 @@ board = []
 guards = []
 walls = []
 player = None
+door = None
 
 BOARD_WIDTH = 20
 
@@ -36,7 +37,7 @@ def start(options):
 
 
 def game_init(options):
-    global guards, board, player, walls
+    global guards, board, player, walls, door
 
     # walls = [(10, 10)]
     # guards = [GuardAgent((11, 11))]
@@ -46,19 +47,24 @@ def game_init(options):
 
     guards = Map1.guards
     player = Map1.player
-    walls = Map1.walls
     board = create_board(Map1.size, Map1.walls, Map1.guards, Map1.player, Map1.door)
+    walls = wall_tiles(Map1.walls)
+    door = board[Map1.door[0]][Map1.door[1]]
 
     # guards = Map2.guards
     # player = Map2.player
-    # walls = Map2.walls
     # board = create_board(Map2.size, Map2.walls, Map2.guards, Map2.player, Map2.door)
+    # walls = wall_tiles(Map2.walls)
+    # door = board[Map2.door[0]][Map2.door[1]]
 
 
 def update(inputs):
     global render_list
     if player is not None:
         render_list = see(player, board)
+
+    render_list.extend(walls)
+    render_list.append(door)
 
     # for guard in guards:
     #     guard.getSight(get_percepts(guard))
@@ -92,3 +98,10 @@ def create_board(board_width, walls, guards, player, door):
     game_board[door[0]][door[1]].is_exit = True
 
     return game_board
+
+
+def wall_tiles(wall_coord):
+    wall_list = []
+    for wall in wall_coord:
+        wall_list.append(board[wall[0]][wall[1]])
+    return wall_list

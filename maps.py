@@ -12,7 +12,7 @@ class Map1:
              (11, 16), (12, 16), (13, 16), (14, 16), (15, 16), (16, 16), (8, 17), (8, 18), (8, 19)]
     guards = [GuardAgent((1, 6)), GuardAgent((14, 10)), GuardAgent((1, 14))]
     player = PlayerAgent((10, 18))
-    door = (0, 0)
+    door = (0, 1)
 
 
 class Map2:
