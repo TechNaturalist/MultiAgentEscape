@@ -51,18 +51,18 @@ def game_init(options):
     # walls = wall_tiles(Map1.walls)
     # door = board[Map1.door[0]][Map1.door[1]]
 
-    guards = Map2.guards
-    player = Map2.player
-    board = create_board(Map2.size, Map2.walls, Map2.guards, Map2.player, Map2.door)
-    walls = wall_tiles(Map2.walls)
-    door = board[Map2.door[0]][Map2.door[1]]
-    #
-    # guards = Map3.guards
-    # player = Map3.player
-    # board = create_board(Map3.size, Map3.walls, Map3.guards, Map3.player, Map3.door)
-    # walls = wall_tiles(Map3.walls)
-    # door = board[Map3.door[0]][Map3.door[1]]
-    #
+    # guards = Map2.guards
+    # player = Map2.player
+    # board = create_board(Map2.size, Map2.walls, Map2.guards, Map2.player, Map2.door)
+    # walls = wall_tiles(Map2.walls)
+    # door = board[Map2.door[0]][Map2.door[1]]
+
+    guards = Map3.guards
+    player = Map3.player
+    board = create_board(Map3.size, Map3.walls, Map3.guards, Map3.player, Map3.door)
+    walls = wall_tiles(Map3.walls)
+    door = board[Map3.door[0]][Map3.door[1]]
+
     # guards = Map4.guards
     # player = Map4.player
     # board = create_board(Map4.size, Map4.walls, Map4.guards, Map4.player, Map4.door)
