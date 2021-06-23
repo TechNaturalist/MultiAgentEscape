@@ -111,7 +111,8 @@ class Renderer:
         self.display.fill(Renderer.BLACK)
 
     def game_background(self):
-        self.display.fill(self.DARKGRAY)
+        if self.display._pixels_address is not None:
+            self.display.fill(self.DARKGRAY)
 
     def finish_rendering(self):
         pygame.display.update()
