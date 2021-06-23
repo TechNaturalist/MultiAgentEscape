@@ -8,6 +8,7 @@ class PlayerAgent(AbstractAgent):
         super().__init__(position)
         self.gold = 100
         self.weapon = KNIFE
+        self.is_player = True
 
     def update(self):
         return self

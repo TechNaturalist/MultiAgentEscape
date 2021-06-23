@@ -15,7 +15,6 @@ class Tile:
         self.is_exit = False
         self.is_wall = False
         self.agent = None
-        self.is_player = False
 
     def set_agent(self, agent=None):
         self.agent = agent

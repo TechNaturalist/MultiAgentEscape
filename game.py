@@ -43,15 +43,16 @@ def game_init(options):
     # player = PlayerAgent((12, 12))
     #
     # board = tile.create_board(BOARD_WIDTH, walls, guards, player)
-    # guards = Map1.guards
-    # player = Map1.player
-    # walls = Map1.walls
-    # board = create_board(Map1.size, Map1.walls, Map1.guards, Map1.player, Map1.door)
 
-    guards = Map2.guards
-    player = Map2.player
-    walls = Map2.walls
-    board = create_board(Map2.size, Map2.walls, Map2.guards, Map2.player, Map2.door)
+    guards = Map1.guards
+    player = Map1.player
+    walls = Map1.walls
+    board = create_board(Map1.size, Map1.walls, Map1.guards, Map1.player, Map1.door)
+
+    # guards = Map2.guards
+    # player = Map2.player
+    # walls = Map2.walls
+    # board = create_board(Map2.size, Map2.walls, Map2.guards, Map2.player, Map2.door)
 
 
 def update(inputs):

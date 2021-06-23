@@ -123,7 +123,7 @@ class Renderer:
         elif tile.is_exit:
             self.color_tile(tile, self.YELLOW)
         elif tile.agent is not None:
-            if tile.is_player:
+            if tile.agent.is_player:
                 self.draw_player(tile.agent)
             else:
                 self.draw_guard(tile.agent)

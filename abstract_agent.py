@@ -31,6 +31,7 @@ class AbstractAgent(ABC):
         self.attack_dice = (2, 8)
         self.defence = 12
         self.debug = False
+        self.is_player = False
 
     def look_around(self, board):
         """Looks around and returns a 2D array of tiles around"""
