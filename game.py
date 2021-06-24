@@ -1,9 +1,11 @@
+from __future__ import annotations
 from typing import TYPE_CHECKING, Tuple, List, Union
 from tile import Tile
 from input import Input
 from renderer import Renderer
 from maps import Map1, Map2, Map3, Map4, Map5
 from percept import see, hear
+import a_star
 
 if TYPE_CHECKING:
     from human_agent import HumanAgent
@@ -16,6 +18,7 @@ guards = []
 walls = []
 player = None
 door = None
+player_path = None
 
 BOARD_WIDTH = 20
 
@@ -37,7 +40,7 @@ def start(options):
 
 
 def game_init(options):
-    global guards, board, player, walls, door
+    global guards, board, player, walls, door, player_path
 
     # walls = [(10, 10)]
     # guards = [GuardAgent((11, 11))]
@@ -51,17 +54,17 @@ def game_init(options):
     # walls = wall_tiles(Map1.walls)
     # door = board[Map1.door[0]][Map1.door[1]]
 
-    # guards = Map2.guards
-    # player = Map2.player
-    # board = create_board(Map2.size, Map2.walls, Map2.guards, Map2.player, Map2.door)
-    # walls = wall_tiles(Map2.walls)
-    # door = board[Map2.door[0]][Map2.door[1]]
+    guards = Map2.guards
+    player = Map2.player
+    board = create_board(Map2.size, Map2.walls, Map2.guards, Map2.player, Map2.door)
+    walls = wall_tiles(Map2.walls)
+    door = board[Map2.door[0]][Map2.door[1]]
 
-    guards = Map3.guards
-    player = Map3.player
-    board = create_board(Map3.size, Map3.walls, Map3.guards, Map3.player, Map3.door)
-    walls = wall_tiles(Map3.walls)
-    door = board[Map3.door[0]][Map3.door[1]]
+    # guards = Map3.guards
+    # player = Map3.player
+    # board = create_board(Map3.size, Map3.walls, Map3.guards, Map3.player, Map3.door)
+    # walls = wall_tiles(Map3.walls)
+    # door = board[Map3.door[0]][Map3.door[1]]
 
     # guards = Map4.guards
     # player = Map4.player
@@ -75,14 +78,20 @@ def game_init(options):
     # walls = wall_tiles(Map5.walls)
     # door = board[Map5.door[0]][Map5.door[1]]
 
+    player_path = a_star.a_star(board, player.position, door.position)[1::]
 
 def update(inputs):
     global render_list
-    if player is not None:
+    classname = type(player).__name__
+    if classname == 'HumanAgent':
         render_list = see(player, board)
+        render_list.extend(walls)
+        render_list.append(door)
+    elif classname == 'PlayerAgent':
+        render_list = sum(board, [])
+    else:
+        raise NotImplementedError
 
-    render_list.extend(walls)
-    render_list.append(door)
 
     # for guard in guards:
     #     guard.getSight(get_percepts(guard))
@@ -95,6 +104,8 @@ def render():
     RENDERER.game_background()
     for sprite in render_list:
         RENDERER.draw_tile(sprite)
+    
+    RENDERER.draw_path(player_path)
 
     RENDERER.draw_grid()
     RENDERER.finish_rendering()

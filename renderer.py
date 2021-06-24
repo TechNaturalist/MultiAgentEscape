@@ -101,11 +101,18 @@ class Renderer:
                              (0, y),
                              (WIDTH, y))
 
-    def color_tile(self, tile, color):
-        x = tile.position[0] * CELLSIZE
-        y = tile.position[1] * CELLSIZE
+    def color_position(self, position, color):
+        x = position[0] * CELLSIZE
+        y = position[1] * CELLSIZE
         tile_rect = pygame.Rect(x, y, CELLSIZE, CELLSIZE)
         pygame.draw.rect(self.display, color, tile_rect)
+
+    def color_tile(self, tile, color):
+        self.color_position((tile.position[0], tile.position[1]), color)
+        # x = tile.position[0] * CELLSIZE
+        # y = tile.position[1] * CELLSIZE
+        # tile_rect = pygame.Rect(x, y, CELLSIZE, CELLSIZE)
+        # pygame.draw.rect(self.display, color, tile_rect)
 
     def menu_background(self):
         self.display.fill(Renderer.BLACK)
@@ -127,6 +134,11 @@ class Renderer:
                 self.draw_player(tile.agent)
             else:
                 self.draw_guard(tile.agent)
+    
+    def draw_path(self, path):
+        if path is not None:
+            for tile in path:
+                self.color_position(tile, self.CORAL)
 
 
 def width(x):
