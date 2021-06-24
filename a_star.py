@@ -1,11 +1,11 @@
-from typing import List
+from typing import List, Tuple
 from tile import Tile
 
 
 class PNode:
     """A node class used for the astar algorithm"""
 
-    def __init__(self, pos: tuple[int, int], p=None):
+    def __init__(self, pos: Tuple[int, int], p=None):
         self.parent = p
         self.pos = pos
 
@@ -22,8 +22,8 @@ class PNode:
 
 
 def a_star(board: List[List[Tile]],
-           start: tuple[int, int],
-           end: tuple[int, int]) -> List[tuple[int, int]]:
+           start: Tuple[int, int],
+           end: Tuple[int, int]) -> List[Tuple[int, int]]:
     """Perform the a_star algorithm and return the resultant path. Based
     on the psuedocode from
     https://en.wikipedia.org/wiki/A*_search_algorithm"""
@@ -91,8 +91,8 @@ def a_star(board: List[List[Tile]],
     raise ValueError
 
 
-def get_valid_neighbor_indexes(pos: tuple[int, int],
-                               board_width: int) -> List[tuple[int, int]]:
+def get_valid_neighbor_indexes(pos: Tuple[int, int],
+                               board_width: int) -> List[Tuple[int, int]]:
     neighbor_indexes = []
     i = pos[0]
     j = pos[1]
