@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Tuple, List, Union
+from typing import Tuple, List
 
 import pygame
 from tile import Tile
@@ -8,11 +8,7 @@ from renderer import Renderer
 from maps import Map1, Map2, Map3, Map4, Map5
 from percept import see, hear
 import a_star
-
-if TYPE_CHECKING:
-    from human_agent import HumanAgent
-    from player_agent import PlayerAgent
-    from guard_agent import GuardAgent
+import random
 
 render_list = []
 board = []
@@ -64,7 +60,8 @@ def game_init(options):
 
     guards = Map3.guards
     player = Map3.player
-    board = create_board(Map3.size, Map3.walls, Map3.guards, Map3.player, Map3.door)
+    board = create_board(Map3.size, Map3.walls,
+                         Map3.guards, Map3.player, Map3.door)
     walls = wall_tiles(Map3.walls)
     door = board[Map3.door[0]][Map3.door[1]]
 
@@ -82,9 +79,10 @@ def game_init(options):
 
     player_path = a_star.a_star(board, player.position, door.position)
 
+
 def update(inputs):
     global render_list, player, board
-    
+
     if player.position == door.position or len(player_path) < 1:
         # Win condition
         # TODO: Add win condition logic/display
@@ -100,7 +98,6 @@ def update(inputs):
     else:
         raise NotImplementedError
 
-
     current_player_tile = board[player.position[0]][player.position[1]]
     current_player_tile.set_agent()
 
@@ -108,6 +105,17 @@ def update(inputs):
     player.position = next_player_position
     board[next_player_position[0]][next_player_position[1]].set_agent(player)
 
+    for guard in guards:
+        valid_moves = get_valid_neighbor_positions(guard.position)
+        # Guard may not move
+        valid_moves.append(guard.position)
+        new_position = random.choice(valid_moves)
+
+        if new_position != guard.position:
+            board[guard.position[0]][guard.position[1]].set_agent()
+
+            board[new_position[0]][new_position[1]].set_agent(guard)
+            guard.position = new_position
 
     # for guard in guards:
     #     guard.getSight(get_percepts(guard))
@@ -120,7 +128,7 @@ def render():
     RENDERER.game_background()
     for sprite in render_list:
         RENDERER.draw_tile(sprite)
-    
+
     RENDERER.draw_path(player_path)
 
     RENDERER.draw_grid()
@@ -146,6 +154,23 @@ def create_board(board_width, walls, guards, player, door):
     game_board[door[0]][door[1]].is_exit = True
 
     return game_board
+
+
+def get_valid_neighbor_positions(position: Tuple[int, int]) -> List[Tuple[int, int]]:
+    global board
+    valid_neighbors = []
+
+    valid_deltas = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+
+    for i, j in valid_deltas:
+        new_x = position[0] + i
+        new_y = position[1] + j
+        if 0 <= new_x < len(board[0]) and 0 <= new_y < len(board):
+            cur_tile = board[new_x][new_y]
+            if not cur_tile.is_wall and cur_tile.agent is None:
+                valid_neighbors.append(cur_tile.position)
+
+    return valid_neighbors
 
 
 def wall_tiles(wall_coord):
