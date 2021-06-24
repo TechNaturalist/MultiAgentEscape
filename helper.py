@@ -4,7 +4,6 @@ import sys
 
 def start_all():
     pygame.init()
-    print("Starting...")
 
 
 def terminate():

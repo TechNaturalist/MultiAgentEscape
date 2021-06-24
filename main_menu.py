@@ -1,9 +1,9 @@
 from renderer import Renderer
-from input import Input
+from inputs import Inputs
 import helper
 
 renderer = Renderer.get_instance()
-input = Input.get_instance()
+inputs = Inputs.get_instance()
 
 STATEMACHINE = ['play', 'options', 'help', 'about']
 
@@ -61,21 +61,24 @@ class MainMenu:
             self.next_action = 'addAbout'
 
     def get_next_action(self):
-        return self.next_action
+        action = self.next_action
+        self.next_action = ''
+        return action
 
     def change_state(self, inputs):
-        if (inputs['keys'] == 'up'):
+        if (inputs['keys'][0] == 'up'):
             self.items[self.stateIndex].highlighted = False
             self.stateIndex = (self.stateIndex + 3) % 4
             self.state = STATEMACHINE[self.stateIndex]
             self.items[self.stateIndex].highlighted = True
-        elif (inputs['keys'] == 'down'):
+        elif (inputs['keys'][0] == 'down'):
             self.items[self.stateIndex].highlighted = False
             self.stateIndex = (self.stateIndex + 1) % 4
             self.state = STATEMACHINE[self.stateIndex]
             self.items[self.stateIndex].highlighted = True
         else:
             pass
+        print(self.state)
 
     def render(self):
         renderer.draw_text(

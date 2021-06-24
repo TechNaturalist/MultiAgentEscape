@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Tuple, List, Union
 from tile import Tile
-from input import Input
+from inputs import Inputs
 from renderer import Renderer
 from maps import Map1, Map2
 from percept import see, hear
@@ -20,18 +20,20 @@ BOARD_WIDTH = 20
 
 
 def start(options):
-    global RENDERER, INPUTS, inputs
+    global RENDERER, INPUTS, action
 
+    print("hello")
     RENDERER = Renderer.get_instance()
-    INPUTS = Input.get_instance()
+    INPUTS = Inputs.get_instance()
     game_map = False
-    inputs = {}
+    action = ''
 
     game_init(options)
 
     while not game_map:
-        inputs = INPUTS.get_input()
-        game_map = update(inputs)
+
+        action = parse_inputs( INPUTS.get_input() )
+        game_map = update(action)
         render()
 
 
@@ -55,11 +57,11 @@ def game_init(options):
     # board = create_board(Map2.size, Map2.walls, Map2.guards, Map2.player, Map2.door)
 
 
-def update(inputs):
+def update(action):
     global render_list
     if player is not None:
+        player_move(board, player, action)
         render_list = see(player, board)
-
     # for guard in guards:
     #     guard.getSight(get_percepts(guard))
     #     render_list.append(guard.update())
@@ -92,3 +94,48 @@ def create_board(board_width, walls, guards, player, door):
     game_board[door[0]][door[1]].is_exit = True
 
     return game_board
+
+def parse_inputs(inputs):
+    action = ''
+    if (len(inputs['keys']) != 0):
+        action = inputs['keys'][0]
+    return action
+
+def player_move(board, player, action):
+    if(can_move(board,player, action)):
+        remove_player(board, player)
+        player.update(action, True)
+        move_player(board, player)
+    else:
+        player.update(action, False)
+    #bump
+
+def can_move(board, player, action):
+    move = True
+    if(action == 'down'):
+        if ( player.position[1] == 19
+            or board[player.position[0]][player.position[1] + 1].is_wall == True ):
+            move = False;
+    if(action == 'up'):
+        if ( player.position[1] == 0
+            or board[player.position[0]][player.position[1] - 1].is_wall == True ):
+            move = False;
+    if(action == 'left'):
+        if ( player.position[0] == 0 
+             or board[player.position[0] - 1][player.position[1]].is_wall == True):
+            move = False;
+    if(action == 'right'):
+        if (player.position[0] == 19 
+            or board[player.position[0] +1 ][player.position[1]].is_wall == True):
+            move = False;
+    return move
+
+def move_player(board, player):
+    board[player.position[0]][player.position[1]].set_agent(player)
+    board[player.position[0]][player.position[1]].is_player = True
+
+def remove_player(board,player):
+    board[player.position[0]][player.position[1]].set_agent(None)
+    board[player.position[0]][player.position[1]].is_player = False
+
+   
