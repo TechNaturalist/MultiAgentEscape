@@ -31,20 +31,19 @@ def start(options):
 
     game_init(options)
 
+    initiative = [player] + guards
+
     while not game_map:
         inputs = INPUTS.get_input()
-        game_map = update(inputs)
+        curr_agent = initiative.pop(0)
+        # Run agents turn.
+        game_map = update(curr_agent)
+        initiative.append(curr_agent)
         render()
 
 
 def game_init(options):
     global guards, board, player, walls, door, player_path
-
-    # walls = [(10, 10)]
-    # guards = [GuardAgent((11, 11))]
-    # player = PlayerAgent((12, 12))
-    #
-    # board = tile.create_board(BOARD_WIDTH, walls, guards, player)
 
     # guards = Map1.guards
     # player = Map1.player
@@ -117,11 +116,10 @@ def update(inputs):
             board[new_position[0]][new_position[1]].set_agent(guard)
             guard.position = new_position
 
-    # for guard in guards:
-    #     guard.getSight(get_percepts(guard))
-    #     render_list.append(guard.update())
-
-    return False
+    if door.position == player.position:
+        return True
+    else:
+        return False
 
 
 def render():
