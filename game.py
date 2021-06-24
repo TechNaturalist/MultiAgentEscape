@@ -97,13 +97,23 @@ def update(inputs):
         render_list.append(door)
     elif classname == 'PlayerAgent':
         render_list = sum(board, [])
+        perceive = see(player, board)
+        is_guard = None
+        g_list = guard_tiles(guards)
+        for g in g_list:
+            if g in perceive:
+                is_guard = g
 
         current_player_tile = board[player.position[0]][player.position[1]]
         current_player_tile.set_agent()
 
-        next_pos = player_path.pop(0)
-        player.position = next_pos
-        board[next_pos[0]][next_pos[1]].set_agent(player)
+        if is_guard is None:
+            next_pos = player_path.pop(0)
+            player.position = next_pos
+            board[next_pos[0]][next_pos[1]].set_agent(player)
+        else:
+            # interact with guard
+            pass
     else:
         raise NotImplementedError
 
@@ -125,7 +135,7 @@ def render():
     for sprite in render_list:
         RENDERER.draw_tile(sprite)
 
-    RENDERER.draw_path(player_path)
+    # RENDERER.draw_path(player_path)
 
     RENDERER.draw_grid()
     RENDERER.finish_rendering()
@@ -176,6 +186,13 @@ def wall_tiles(wall_coord):
     return wall_list
 
 
+def guard_tiles(guard_obj):
+    guard_list = []
+    for guard in guard_obj:
+        guard_list.append(board[guard.position[0]][guard.position[1]])
+    return guard_list
+
+
 def parse_inputs(inputs):
     action = ''
     if (len(inputs['keys']) != 0):
@@ -190,7 +207,6 @@ def player_move(board, player, action):
         move_player(board, player)
     else:
         player.update(action, False)
-    # bump
 
 
 def can_move(board, player, action):
