@@ -97,23 +97,7 @@ def update(agent):
         render_list.append(door)
     elif classname == 'PlayerAgent':
         render_list = sum(board, [])
-        perceive = see(agent, board)
-        is_guard = None
-        g_list = guard_tiles(guards)
-        for g in g_list:
-            if g in perceive:
-                is_guard = g
-
-        current_player_tile = board[agent.position[0]][agent.position[1]]
-        current_player_tile.set_agent()
-
-        if is_guard is None:
-            next_pos = player_path.pop(0)
-            agent.position = next_pos
-            board[next_pos[0]][next_pos[1]].set_agent(agent)
-        else:
-            # interact with guard
-            pass
+        agent.update(guards, board, player_path)
     else:
         valid_moves = get_valid_neighbor_positions(agent.position)
         # Guard may not move
@@ -138,7 +122,7 @@ def render():
     RENDERER.finish_rendering()
 
     if type(player).__name__ == 'PlayerAgent':
-        pygame.time.wait(500)
+        pygame.time.wait(100)
 
 
 def create_board(board_width, walls, guards, player, door):
@@ -181,13 +165,6 @@ def wall_tiles(wall_coord):
     for wall in wall_coord:
         wall_list.append(board[wall[0]][wall[1]])
     return wall_list
-
-
-def guard_tiles(guard_obj):
-    guard_list = []
-    for guard in guard_obj:
-        guard_list.append(board[guard.position[0]][guard.position[1]])
-    return guard_list
 
 
 def parse_inputs(inputs):
