@@ -97,15 +97,15 @@ def update(inputs):
         render_list.append(door)
     elif classname == 'PlayerAgent':
         render_list = sum(board, [])
+
+        current_player_tile = board[player.position[0]][player.position[1]]
+        current_player_tile.set_agent()
+
+        next_pos = player_path.pop(0)
+        player.position = next_pos
+        board[next_pos[0]][next_pos[1]].set_agent(player)
     else:
         raise NotImplementedError
-
-    current_player_tile = board[player.position[0]][player.position[1]]
-    current_player_tile.set_agent()
-
-    next_player_position = player_path.pop(0)
-    player.position = next_player_position
-    board[next_player_position[0]][next_player_position[1]].set_agent(player)
 
     for guard in guards:
         valid_moves = get_valid_neighbor_positions(guard.position)
