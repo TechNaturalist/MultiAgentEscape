@@ -11,17 +11,17 @@ defaults = {
 }
 
 
-class Input:
+class Inputs:
     __instance = None
 
     @staticmethod
     def get_instance():
-        if Input.__instance is None:
-            Input()
-        return Input.__instance
+        if Inputs.__instance is None:
+            Inputs()
+        return Inputs.__instance
 
     def __init__(self):
-        if Input.__instance is not None:
+        if Inputs.__instance is not None:
             raise Exception("this class is a singleton!")
         else:
             self.map = defaults
@@ -29,7 +29,7 @@ class Input:
             self.currentInputs = {}
             self.keys = []
             self.mouse = {}
-            Input.__instance = self
+            Inputs.__instance = self
 
     def set_inputs(self, location, key):
         self.map[location] = key
@@ -56,6 +56,8 @@ class Input:
         pass
 
     def get_input(self):
+        self.keys = []
+        self.mouse = {}
         self.get_mouse()
         self.get_keys()
 

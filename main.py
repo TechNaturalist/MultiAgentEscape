@@ -3,6 +3,8 @@
 import pygame
 import helper
 import game
+import menu
+
 
 helper.start_all()
 
@@ -15,7 +17,7 @@ def main():
     pygame.display.set_caption(GAMECAPTION)
 
     while True:
-        # menuOptions = Menu.start()
+        #menu_options = menu.start()
         menu_options = {'guards': 3}
         game.start(menu_options)
 

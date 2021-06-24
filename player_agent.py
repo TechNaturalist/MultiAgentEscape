@@ -9,9 +9,21 @@ class PlayerAgent(AbstractAgent):
         self.gold = 100
         self.weapon = KNIFE
         self.is_player = True
+        self.conflict = False
 
-    def update(self):
-        return self
+    def update(self, action, can_move):
+        if(not self.conflict and can_move):
+            if(action == 'up'):
+                self.position =(self.position[0], self.position[1] - 1)
+            elif( action == 'down'):
+                self.position =(self.position[0], self.position[1] + 1)
+            elif(action == 'left'):
+                self.position =(self.position[0] - 1, self.position[1])
+            elif(action == 'right'):
+                self.position =(self.position[0] +1, self.position[1])
+            else:
+                ##conflict menu
+                pass
 
     def render(self, board):
         if self.debug:
