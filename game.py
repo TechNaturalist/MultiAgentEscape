@@ -1,5 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Tuple, List, Union
+
+import pygame
 from tile import Tile
 from input import Input
 from renderer import Renderer
@@ -54,17 +56,17 @@ def game_init(options):
     # walls = wall_tiles(Map1.walls)
     # door = board[Map1.door[0]][Map1.door[1]]
 
-    guards = Map2.guards
-    player = Map2.player
-    board = create_board(Map2.size, Map2.walls, Map2.guards, Map2.player, Map2.door)
-    walls = wall_tiles(Map2.walls)
-    door = board[Map2.door[0]][Map2.door[1]]
+    # guards = Map2.guards
+    # player = Map2.player
+    # board = create_board(Map2.size, Map2.walls, Map2.guards, Map2.player, Map2.door)
+    # walls = wall_tiles(Map2.walls)
+    # door = board[Map2.door[0]][Map2.door[1]]
 
-    # guards = Map3.guards
-    # player = Map3.player
-    # board = create_board(Map3.size, Map3.walls, Map3.guards, Map3.player, Map3.door)
-    # walls = wall_tiles(Map3.walls)
-    # door = board[Map3.door[0]][Map3.door[1]]
+    guards = Map3.guards
+    player = Map3.player
+    board = create_board(Map3.size, Map3.walls, Map3.guards, Map3.player, Map3.door)
+    walls = wall_tiles(Map3.walls)
+    door = board[Map3.door[0]][Map3.door[1]]
 
     # guards = Map4.guards
     # player = Map4.player
@@ -78,10 +80,16 @@ def game_init(options):
     # walls = wall_tiles(Map5.walls)
     # door = board[Map5.door[0]][Map5.door[1]]
 
-    player_path = a_star.a_star(board, player.position, door.position)[1::]
+    player_path = a_star.a_star(board, player.position, door.position)
 
 def update(inputs):
-    global render_list
+    global render_list, player, board
+    
+    if player.position == door.position or len(player_path) < 1:
+        # Win condition
+        # TODO: Add win condition logic/display
+        return True
+
     classname = type(player).__name__
     if classname == 'HumanAgent':
         render_list = see(player, board)
@@ -91,6 +99,14 @@ def update(inputs):
         render_list = sum(board, [])
     else:
         raise NotImplementedError
+
+
+    current_player_tile = board[player.position[0]][player.position[1]]
+    current_player_tile.set_agent()
+
+    next_player_position = player_path.pop(0)
+    player.position = next_player_position
+    board[next_player_position[0]][next_player_position[1]].set_agent(player)
 
 
     # for guard in guards:
@@ -109,6 +125,9 @@ def render():
 
     RENDERER.draw_grid()
     RENDERER.finish_rendering()
+
+    if type(player).__name__ == 'PlayerAgent':
+        pygame.time.wait(500)
 
 
 def create_board(board_width, walls, guards, player, door):
