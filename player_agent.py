@@ -13,7 +13,7 @@ class PlayerAgent(AbstractAgent):
         self.is_player = True
         self.conflict = False
 
-    def update(self, guards, board, player_path):
+    def update(self, board, player_path, traveled, guards, player, door):
         perceive = see(self, board)
         is_guard = None
         g_list = self.guard_tiles(guards, board)
@@ -26,10 +26,12 @@ class PlayerAgent(AbstractAgent):
 
         if is_guard is None:
             next_pos = player_path.pop(0)
+            traveled.append(self.position)
             self.position = next_pos
             board[next_pos[0]][next_pos[1]].set_agent(self)
         else:
-            # interact with guard
+            current_player_tile.set_agent(self)
+            # react to guard
             pass
 
     def render(self, board):
