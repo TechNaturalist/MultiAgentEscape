@@ -30,20 +30,19 @@ def start(options):
 
     game_init(options)
 
+    initiative = [player] + guards
+
     while not game_map:
         inputs = INPUTS.get_input()
-        game_map = update(inputs)
+        curr_agent = initiative.pop(0)
+        # Run agents turn.
+        game_map = update(curr_agent)
+        initiative.append(curr_agent)
         render()
 
 
 def game_init(options):
     global guards, board, player, walls, door
-
-    # walls = [(10, 10)]
-    # guards = [GuardAgent((11, 11))]
-    # player = PlayerAgent((12, 12))
-    #
-    # board = tile.create_board(BOARD_WIDTH, walls, guards, player)
 
     # guards = Map1.guards
     # player = Map1.player
@@ -76,19 +75,18 @@ def game_init(options):
     # door = board[Map5.door[0]][Map5.door[1]]
 
 
-def update(inputs):
+def update(agent):
     global render_list
-    if player is not None:
-        render_list = see(player, board)
+    if agent is not None:
+        render_list = see(agent, board)
 
     render_list.extend(walls)
     render_list.append(door)
 
-    # for guard in guards:
-    #     guard.getSight(get_percepts(guard))
-    #     render_list.append(guard.update())
-
-    return False
+    if door.position == player.position:
+        return True
+    else:
+        return False
 
 
 def render():
