@@ -81,7 +81,7 @@ def game_init(options):
     player_path = a_star.a_star(board, player.position, door.position)
 
 
-def update(inputs):
+def update(agent):
     global render_list, player, board
 
     if player.position == door.position or len(player_path) < 1:
@@ -89,45 +89,42 @@ def update(inputs):
         # TODO: Add win condition logic/display
         return True
 
-    classname = type(player).__name__
+    classname = type(agent).__name__
     if classname == 'HumanAgent':
-        player_move(board, player, action)
-        render_list = see(player, board)
+        player_move(board, agent, action)
+        render_list = see(agent, board)
         render_list.extend(walls)
         render_list.append(door)
     elif classname == 'PlayerAgent':
         render_list = sum(board, [])
-        perceive = see(player, board)
+        perceive = see(agent, board)
         is_guard = None
         g_list = guard_tiles(guards)
         for g in g_list:
             if g in perceive:
                 is_guard = g
 
-        current_player_tile = board[player.position[0]][player.position[1]]
+        current_player_tile = board[agent.position[0]][agent.position[1]]
         current_player_tile.set_agent()
 
         if is_guard is None:
             next_pos = player_path.pop(0)
-            player.position = next_pos
-            board[next_pos[0]][next_pos[1]].set_agent(player)
+            agent.position = next_pos
+            board[next_pos[0]][next_pos[1]].set_agent(agent)
         else:
             # interact with guard
             pass
     else:
-        raise NotImplementedError
-
-    for guard in guards:
-        valid_moves = get_valid_neighbor_positions(guard.position)
+        valid_moves = get_valid_neighbor_positions(agent.position)
         # Guard may not move
-        valid_moves.append(guard.position)
+        valid_moves.append(agent.position)
         new_position = random.choice(valid_moves)
 
-        if new_position != guard.position:
-            board[guard.position[0]][guard.position[1]].set_agent()
+        if new_position != agent.position:
+            board[agent.position[0]][agent.position[1]].set_agent()
 
-            board[new_position[0]][new_position[1]].set_agent(guard)
-            guard.position = new_position
+            board[new_position[0]][new_position[1]].set_agent(agent)
+            agent.position = new_position
 
 
 def render():
