@@ -102,7 +102,6 @@ def update(agent, action):
 
 
 def render():
-    print("render")
     RENDERER.game_background()
     for sprite in render_list:
         RENDERER.draw_tile(sprite)

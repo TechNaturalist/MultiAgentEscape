@@ -21,8 +21,9 @@ options = {
 
 
 def start():
-    global inputs, menu_stack, options
+    global inputs, menu_stack, options, last
     menu_stack = [MainMenu()]
+    last = 0
     while (len(menu_stack) != 0):
         inputs = INPUT.get_input()
         update()
@@ -49,7 +50,6 @@ def next_instruction(action):
     global last, menu_stack
     if (action == 'pop'):
         menu_stack.pop()
-        #menu_stack = menu_stack[:-1]
         last = last - 1
     elif (action == 'addOption'):
         menu_stack.append(OptionsMenu())
