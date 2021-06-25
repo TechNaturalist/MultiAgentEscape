@@ -12,4 +12,4 @@ def start_all():
 
 def terminate():
     pygame.quit()
-    sys.exit
+    sys.exit()
