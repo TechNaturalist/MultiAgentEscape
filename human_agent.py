@@ -50,3 +50,9 @@ class HumanAgent(AbstractAgent):
         for guard in guard_obj:
             guard_list.append(board[guard.position[0]][guard.position[1]])
         return guard_list
+
+    def damage(self, hit):
+        self.hp -= hit
+        if self.hp <= 0:
+            return True
+        return False

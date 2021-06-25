@@ -71,7 +71,6 @@ class Game:
         self.traveled = []
 
     def update(self, agent, action):
-
         end_game = False
 
         if type(self.player).__name__ == 'PlayerAgent':
@@ -97,7 +96,6 @@ class Game:
 
         return end_game
 
-
     def render(self):
         Game.RENDERER.game_background()
         if type(self.player).__name__ == 'PlayerAgent':
@@ -111,7 +109,6 @@ class Game:
 
         if type(self.player).__name__ == 'PlayerAgent':
             pygame.time.wait(30)
-
 
     def create_board(self, board_width, walls, guards, player, door):
         game_board = [[Tile((x, y)) for y in range(board_width)]
@@ -137,28 +134,18 @@ class Game:
             wall_list.append(self.board[wall[0]][wall[1]])
         return wall_list
 
-
-#def parse_inputs(inputs):
-#    action = ''
-#    while (len(inputs['keys']) != 0):
-#        action = inputs['keys'][0]
-#    return action
-
     def block_parse_inputs(self, inputs):
         action = ''
         while (len(inputs['keys']) == 0):
-            inputs=INPUTS.get_input()
+            inputs=self.INPUTS.get_input()
         action = inputs['keys'][0]
         return action
 
-
-
     def player_move(self, board, player, action):
-        if(can_move(board, player, action)):
-            player.update(action, True, board, guards)
+        if(self.can_move(board, player, action)):
+            player.update(action, True, board, self.guards)
         else:
-            player.update(action, False, board, guards)
-
+            player.update(action, False, board, self.guards)
 
     def can_move(self, board, player, action):
         move = True
