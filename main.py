@@ -1,6 +1,6 @@
 import pygame
 import helper
-import game
+from game import Game
 from menu import Menu
 
 
@@ -18,6 +18,7 @@ def main():
       
         menu = Menu();
         menu_options = menu.start()
+        game = Game();
         gold = game.start(menu_options)
 
         #for i in range(5):
