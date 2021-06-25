@@ -1,7 +1,7 @@
 import pygame
 import helper
 import game
-import menu
+from menu import Menu
 
 
 helper.start_all()
@@ -16,6 +16,7 @@ def main():
 
     while True:
       
+        menu = Menu();
         menu_options = menu.start()
         gold = game.start(menu_options)
 
