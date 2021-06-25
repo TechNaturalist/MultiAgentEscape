@@ -22,13 +22,10 @@ class HumanAgent(AbstractAgent):
         self.conflict = False
 
     def update(self,
+               action,
+               can_move,
                board: List[List[Tile]],
-               player_path: List[Tile],
-               traveled,
-               guards: List[AbstractAgent],
-               player: AbstractAgent,
-               door: Tile,
-               can_move):
+               guards: List[AbstractAgent]):
 
         perceive = see(self, board)
         # is_guard = None

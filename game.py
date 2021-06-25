@@ -74,7 +74,6 @@ class Game:
         self.traveled = []
 
     def update(self, agent, action):
-
         end_game = False
 
         if type(self.player).__name__ == 'PlayerAgent':
@@ -138,13 +137,6 @@ class Game:
             wall_list.append(self.board[wall[0]][wall[1]])
         return wall_list
 
-
-# def parse_inputs(inputs):
-#    action = ''
-#    while (len(inputs['keys']) != 0):
-#        action = inputs['keys'][0]
-#    return action
-
     def block_parse_inputs(self, inputs):
         action = ''
         while (len(inputs['keys']) == 0):
@@ -154,9 +146,10 @@ class Game:
 
     def player_move(self, board, player, action):
         if(self.can_move(board, player, action)):
-            player.update(action, True, board, guards)
+            player.update(action, True, board, self.guards)
         else:
-            player.update(action, True, board, guards)
+            player.update(action, False, board, self.guards)
+
 
     def can_move(self, board, player, action):
         move = True
