@@ -1,4 +1,5 @@
 from __future__ import annotations
+from coalition import Coalition
 from typing import Tuple, List
 
 import pygame
@@ -80,6 +81,7 @@ def game_init(options):
     # door = board[Map5.door[0]][Map5.door[1]]
 
     player_path = a_star.a_star(board, player.position, door.position)
+    guards = Coalition.form_coalition(guards)
     traveled = []
 
 

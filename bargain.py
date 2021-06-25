@@ -1,3 +1,4 @@
+from guard_agent import GuardAgent
 from typing import List, Tuple, Union
 from abstract_agent import AbstractAgent
 import numpy as np
@@ -7,8 +8,8 @@ from random import randint, random
 BRIBE_AMOUNT = 25
 
 
-def bribe(player: AbstractAgent, agent: AbstractAgent)\
-        -> Tuple[AbstractAgent, AbstractAgent]:
+def bribe(player: AbstractAgent, agent: GuardAgent)\
+        -> Tuple[AbstractAgent, AbstractAgent, bool]:
 
     # Form matrix:
     #              kill    bribe
@@ -17,10 +18,37 @@ def bribe(player: AbstractAgent, agent: AbstractAgent)\
     #
 
     if player.gold >= BRIBE_AMOUNT:
-        # TODO: Calculate bribe here based on criteria
-        pass
 
-    return player, agent
+        matrix = [[(player.weapon - agent.get_perceived_power(),
+                    agent.weapon - player.get_perceived_power()),
+                   (player.weapon - agent.get_perceived_power(),
+                   BRIBE_AMOUNT)],
+                  [(player.gold - agent.get_perceived_power(),
+                   player.get_perceived_power()),
+                   (player.gold,
+                   BRIBE_AMOUNT)]]
+
+        print(matrix)
+
+        p, q = mixed_strategy_2x2(matrix)
+
+        if p is None or q is None:
+            bribe_success = False
+            return player, agent, bribe_success
+
+        if 0 < p <= 1 and 0 < q <= 1:
+            if (p == 1 and q == 1) or \
+                    random() < (1 - p) and random() < (1 - q):
+                agent.bribe_offered = True
+                player.gold -= BRIBE_AMOUNT
+                agent.gold += BRIBE_AMOUNT
+                bribe_success = True
+                agent.is_bribed = True
+                return player, agent, bribe_success
+
+    bribe_success = False
+
+    return player, agent, bribe_success
 
 
 def mixed_strategy_2x2(matrix: List[List[Tuple[int, int]]]) \
