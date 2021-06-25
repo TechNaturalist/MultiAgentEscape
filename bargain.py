@@ -28,8 +28,9 @@ def bribe(player: AbstractAgent, agent: GuardAgent)\
                    (player.gold,
                    BRIBE_AMOUNT)]]
 
-        for row in matrix:
-            print(row)
+        print(f"| {matrix[0][0]} | {matrix[0][1]} |")
+        print(f"| {matrix[1][0]} | {matrix[1][1]} |")
+
 
         p, q = mixed_strategy_2x2(matrix)
 
@@ -48,11 +49,12 @@ def bribe(player: AbstractAgent, agent: GuardAgent)\
                 agent.gold += BRIBE_AMOUNT
                 bribe_success = True
                 agent.is_bribed = True
-                return player, agent, bribe_success
+                print("The guard accepted the bribe")
+                return bribe_success
 
     bribe_success = False
-
-    return player, agent, bribe_success
+    print("The guard rejected the bribe...")
+    return bribe_success
 
 
 def mixed_strategy_2x2(matrix: List[List[Tuple[int, int]]]) \
@@ -91,8 +93,8 @@ def mixed_strategy_2x2(matrix: List[List[Tuple[int, int]]]) \
     return (p, q)
 
 
-def pure_strategy_2x2(matrix: List[List[tuple[int, int]]]) \
-        -> List[tuple[int, int]]:
+def pure_strategy_2x2(matrix: List[List[Tuple[int, int]]]) \
+        -> List[Tuple[int, int]]:
     col_strategies = []
     row_strategies = []
 
@@ -123,8 +125,8 @@ def pure_strategy_2x2(matrix: List[List[tuple[int, int]]]) \
     return result
 
 
-def get_p_q(matrix: List[List[tuple[int, int]]]) \
-        -> tuple[float, float]:
+def get_p_q(matrix: List[List[Tuple[int, int]]]) \
+        -> Tuple[float, float]:
     mixed_p, mixed_q = mixed_strategy_2x2(matrix)
     pure_solution = pure_strategy_2x2(matrix)
 
