@@ -111,7 +111,8 @@ class Renderer:
         # pygame.draw.rect(self.display, color, tile_rect)
 
     def menu_background(self):
-        self.display.fill(Renderer.BLACK)
+        if self.display._pixels_address is not None:
+            self.display.fill(Renderer.BLACK)
 
     def game_background(self):
         if self.display._pixels_address is not None:
@@ -130,7 +131,7 @@ class Renderer:
                 self.draw_player(tile.agent)
             else:
                 self.draw_guard(tile.agent)
-    
+
     def draw_path(self, path):
         if path is not None:
             for tile in path:
