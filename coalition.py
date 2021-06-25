@@ -58,7 +58,7 @@ class Coalition:
             c.coalition = coalition
             return [a, b, c]
 
-        if v['a'] + v['c'] > v['ac']:
+        if v['a'] + v['c'] < v['ac']:
             print("AC coalition")
             coalition = Coalition(2)
             a.coalition = coalition
@@ -66,7 +66,7 @@ class Coalition:
             b.coalition = Coalition(1)
             return [a, b, c]
 
-        if v['a'] + v['b'] > v['ab']:
+        if v['a'] + v['b'] < v['ab']:
             print("AB coalition")
             coalition = Coalition(2)
             a.coalition = coalition
@@ -74,7 +74,7 @@ class Coalition:
             c.coalition = Coalition(1)
             return [a, b, c]
 
-        if v['b'] + v['c'] > v['bc']:
+        if v['b'] + v['c'] < v['bc']:
             print("BC coalition")
             coalition = Coalition(2)
             c.coalition = coalition
