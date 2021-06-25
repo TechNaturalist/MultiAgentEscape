@@ -17,9 +17,28 @@ remaining gold. The guards know the thief is crafty,
 so they will make coalitions to split the gold when
 the thief is caught.
 
-## Multiagent Systems Fundamentals Used
+## Multiagent Systems Fundamentals
+
+### Environment
+
+The environment is as follows:
+- Accessible (although agents may not know other agents' positions)
+- Deterministic
+- Static (only agents affect world state)
+- Discrete
 
 ### Agents
+
+There are two different agents in the game if a human player is
+not involved:
+
+- Guard Agent
+- Player Agent (A.K.A. thief)
+
+Both guard and player agents are intelligent and make decisions
+based on various variables. Both guards and player keep track
+of the world and what they do to it. The agents react on percepts
+and environment to try to maximize their utility.
 
 Guards are automated agents aware of their environment who
 use their percepts to catch the thief. Guards negotiate
@@ -45,4 +64,8 @@ We have incorporated a bimatrix solver which finds:
 
 Guards will join coalitions based on utility. Guards will
 only join if the coalition is superaddative. Grand
-coalitions are hard to get. 
+coalitions are hard to get.
+
+### Shapley Value
+The Shapley value for the guards' coalition is calculated
+to influence payouts.
