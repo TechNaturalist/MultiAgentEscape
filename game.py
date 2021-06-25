@@ -54,7 +54,7 @@ class Game:
         return self.player.gold
 
     def game_init(self,options):
-        game_maps = [Map1, Map2, Map3, Map4, Map5]
+        game_maps = [Map1(), Map2(), Map3(), Map4(), Map5()]
         self.Map = game_maps[options['map']]
         self.guards = self.Map.guards
         self.board = self.create_board(self.Map.size, self.Map.walls, self.Map.guards, self.Map.player, self.Map.door)
