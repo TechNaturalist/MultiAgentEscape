@@ -43,7 +43,14 @@ def start(options):
         game_map = update(curr_agent)
         initiative.append(curr_agent)
         render()
-    print(player.gold)
+    
+    if player.is_dead:
+        print("Oh no! The player died")
+        exit()
+    else:
+        print("The player reached the exit!")
+        print(f"The player had {player.gold} gold")
+        exit()
 
 
 def game_init(options):
