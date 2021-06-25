@@ -4,7 +4,6 @@ Written by: Dick Loveland, Nathan Holst, Max Clark
 """
 from __future__ import annotations
 from coalition import Coalition
-from typing import Tuple, List
 import pygame
 from tile import Tile
 from inputs import Inputs
@@ -154,7 +153,7 @@ class Game:
         return action
 
     def player_move(self, board, player, action):
-        if(can_move(board, player, action)):
+        if(self.can_move(board, player, action)):
             player.update(action, True, board, guards)
         else:
             player.update(action, False, board, guards)
