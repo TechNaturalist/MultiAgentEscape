@@ -35,7 +35,6 @@ class GuardAgent(AbstractAgent):
         if board[player.position[0]][player.position[1]] in perceive:
             # react to player character
             pass
-
         elif not self.is_bribed and self.on_trail is not None:
             if len(self.on_trail) > 2:
                 current_tile = board[self.position[0]][self.position[1]]
