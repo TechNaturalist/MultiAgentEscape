@@ -18,6 +18,7 @@ def bribe(player: AbstractAgent, agent: GuardAgent)\
     #
 
     if player.gold >= BRIBE_AMOUNT:
+
         matrix = [[(player.weapon - agent.get_perceived_power(),
                     agent.weapon - player.get_perceived_power()),
                    (player.weapon - agent.get_perceived_power(),
@@ -27,6 +28,8 @@ def bribe(player: AbstractAgent, agent: GuardAgent)\
                    (player.gold,
                    BRIBE_AMOUNT)]]
 
+        print(matrix)
+
         p, q = mixed_strategy_2x2(matrix)
 
         if p is None or q is None:
@@ -34,13 +37,11 @@ def bribe(player: AbstractAgent, agent: GuardAgent)\
             return player, agent, bribe_success
 
         if 0 < p <= 1 and 0 < q <= 1:
-            if p == 1 and q == 1:
+            if (p == 1 and q == 1) or \
+                    random() < (1 - p) and random() < (1 - q):
+                agent.bribe_offered = True
                 player.gold -= BRIBE_AMOUNT
-                bribe_success = True
-                agent.is_bribed = True
-                return player, agent, bribe_success
-            elif random() < (1 - p) and random() < (1 - q):
-                player.gold -= BRIBE_AMOUNT
+                agent.gold += BRIBE_AMOUNT
                 bribe_success = True
                 agent.is_bribed = True
                 return player, agent, bribe_success
