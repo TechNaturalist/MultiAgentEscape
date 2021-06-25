@@ -98,7 +98,6 @@ class Game:
         if self.player.position == self.door.position or len(self.player_path) < 1:
             # Win condition
             # TODO: Add win condition logic/display
-            print("hello")
             end_game = True
 
         return end_game
