@@ -140,8 +140,7 @@ class Game:
     def block_parse_inputs(self, inputs):
         action = ''
         while (len(inputs['keys']) == 0):
-            inputs=self.INPUTS.get_input()
-
+            inputs = self.INPUTS.get_input()
         action = inputs['keys'][0]
         return action
 
