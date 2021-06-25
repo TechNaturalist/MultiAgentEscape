@@ -34,7 +34,22 @@ class GuardAgent(AbstractAgent):
         perceive = see(self, board)
         if board[player.position[0]][player.position[1]] in perceive:
             # react to player character
-            pass
+            if self.bribe_offered:
+                self.bribe_offered = False
+            elif not self.is_bribed:  # Attack!
+                print("The guard attacks the Thief!")
+                won = player.damage(self.weapon)
+                if won:
+                    print("The guards captured the Thief!")
+                    board[player.position[0]][player.position[1]].set_agent()
+                    temp_gold = player.gold
+                    player.gold = 0
+                    if self.coalition is not None:
+                        # split gold with coalition
+                        pass
+                    door.set_agent(player)
+            else:  # Was bribed, or is dead.
+                pass
         elif not self.is_bribed and self.on_trail is not None:
             if len(self.on_trail) > 2:
                 current_tile = board[self.position[0]][self.position[1]]
@@ -49,6 +64,8 @@ class GuardAgent(AbstractAgent):
             next_pos = self.on_trail.pop(0)
             self.position = next_pos
             board[next_pos[0]][next_pos[1]].set_agent(self)
+        elif self.is_bribed:
+            pass
         else:
             valid_moves = self.get_valid_neighbor_positions(
                 self.position, board)
@@ -90,4 +107,10 @@ class GuardAgent(AbstractAgent):
             tile_list.append(board[coord[0]][coord[1]])
         return tile_list
 
-    
+    def damage(self, hit):
+        self.hp -= hit
+        if self.hp <= 0:
+            self.is_bribed = True
+            self.coalition = None
+            return True
+        return False

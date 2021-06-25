@@ -9,8 +9,8 @@ class PlayerAgent(AbstractAgent):
 
     def __init__(self, position: Tuple[int, int]) -> None:
         super().__init__(position)
-        self.hp = 20
-        self.total_hp = 20
+        self.hp = 10
+        self.total_hp = 10
         self.gold = 100
         self.weapon = KNIFE
         self.is_player = True
@@ -28,8 +28,14 @@ class PlayerAgent(AbstractAgent):
         current_player_tile.set_agent()
 
         if self.conflict:
-            # FIGHT!
             current_player_tile.set_agent(self)
+            # FIGHT!
+            print("The Thief attacks the guard with his knife!")
+            won = is_guard.agent.damage(self.weapon)
+            if won:
+                print("The Thief killed a guard!")
+                guards.remove(is_guard.agent)
+                self.conflict = False
         else:
             if is_guard is None:
                 next_pos = player_path.pop(0)
@@ -46,6 +52,7 @@ class PlayerAgent(AbstractAgent):
                     guards.remove(is_guard.agent)
                 else:
                     self.conflict = True
+                    is_guard.agent.bribe_offered = True
 
     def render(self, board):
         if self.debug:
@@ -58,3 +65,9 @@ class PlayerAgent(AbstractAgent):
         for guard in guard_obj:
             guard_list.append(board[guard.position[0]][guard.position[1]])
         return guard_list
+
+    def damage(self, hit):
+        self.hp -= hit
+        if self.hp <= 0:
+            return True
+        return False
