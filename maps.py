@@ -1,5 +1,6 @@
 from player_agent import PlayerAgent
 from guard_agent import GuardAgent
+from human_agent import HumanAgent
 
 
 class Map1:
@@ -12,6 +13,7 @@ class Map1:
              (11, 16), (12, 16), (13, 16), (14, 16), (15, 16), (16, 16), (8, 17), (8, 18), (8, 19)]
     guards = [GuardAgent((1, 6)), GuardAgent((14, 10)), GuardAgent((1, 14))]
     player = PlayerAgent((10, 18))
+    human = HumanAgent((10, 18))
     door = (0, 1)
 
 
@@ -26,6 +28,7 @@ class Map2:
              (13, 16), (14, 16), (15, 16), (16, 16), (3, 17), (3, 18), (3, 19)]
     guards = [GuardAgent((14, 1)), GuardAgent((5, 5)), GuardAgent((1, 17))]
     player = PlayerAgent((18, 1))
+    human = HumanAgent((18, 1))
     door = (1, 19)
 
 
@@ -39,6 +42,7 @@ class Map3:
              (3, 16), (4, 16), (5, 16), (6, 16), (7, 16), (8, 16), (12, 16), (16, 16), (16, 17), (16, 18), (16, 19)]
     guards = [GuardAgent((1, 1)), GuardAgent((1, 18)), GuardAgent((18, 18))]
     player = PlayerAgent((10, 8))
+    human = HumanAgent((10, 8))
     door = (0, 14)
 
 
@@ -53,6 +57,7 @@ class Map4:
              (17, 18), (11, 19), (19, 19)]
     guards = [GuardAgent((5, 5)), GuardAgent((17, 7)), GuardAgent((10, 17))]
     player = PlayerAgent((0, 17))
+    human = HumanAgent((0, 17))
     door = (15, 0)
 
 
@@ -71,4 +76,5 @@ class Map5:
              (16, 17), (1, 18), (10, 18), (16, 18), (1, 19), (4, 19), (16, 19)]
     guards = [GuardAgent((0, 0)), GuardAgent((10, 9)), GuardAgent((19, 19))]
     player = PlayerAgent((19, 0))
+    human = HumanAgent((19, 0))
     door = (0, 19)
