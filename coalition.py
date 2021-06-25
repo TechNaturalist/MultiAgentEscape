@@ -44,7 +44,7 @@ class Coalition:
         print(f"{{ab}} = {v['ab']}")
         print(f"{{ac}} = {v['ac']}")
         print(f"{{bc}} = {v['bc']}")
-        print(f"{{abc}} = {v['abc']}")
+        print(f"{{abc}} = {v['abc']:.4f}")
 
         a_shap, b_shap, c_shap = Coalition.shapley_calc_3x(v)
 
@@ -119,7 +119,7 @@ class Coalition:
         b_count /= 6
         c_count /= 6
 
-        print(f"Shapley values: a = {a_count}, b = {b_count}, c = {c_count}")
+        print(f"Shapley values: a = {a_count:.4f}, b = {b_count:.4f}, c = {c_count:.4f}")
 
         return a_count, b_count, c_count
 
