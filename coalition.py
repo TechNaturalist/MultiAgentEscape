@@ -19,8 +19,9 @@ colors = {
 
 
 class Coalition:
-    def __init__(self) -> None:
+    def __init__(self, member_count: int) -> None:
         self.color = random.choice(list(colors.keys()))
+        self.member_count = member_count
 
     @staticmethod
     def form_coalition(guards: List[GuardAgent]) -> List[GuardAgent]:
@@ -51,7 +52,7 @@ class Coalition:
             v['ac'] + v['b'] < v['abc'] and \
                 v['bc'] + v['a'] < v['abc']:
             print("All guards joined coalition")
-            coalition = Coalition()
+            coalition = Coalition(3)
             a.coalition = coalition
             b.coalition = coalition
             c.coalition = coalition
@@ -59,26 +60,26 @@ class Coalition:
 
         if v['a'] + v['c'] > v['ac']:
             print("AC coalition")
-            coalition = Coalition()
+            coalition = Coalition(2)
             a.coalition = coalition
             c.coalition = coalition
-            b.coalition = Coalition()
+            b.coalition = Coalition(1)
             return [a, b, c]
 
         if v['a'] + v['b'] > v['ab']:
             print("AB coalition")
-            coalition = Coalition()
+            coalition = Coalition(2)
             a.coalition = coalition
             b.coalition = coalition
-            c.coalition = Coalition()
+            c.coalition = Coalition(1)
             return [a, b, c]
 
         if v['b'] + v['c'] > v['bc']:
             print("BC coalition")
-            coalition = Coalition()
+            coalition = Coalition(2)
             c.coalition = coalition
             b.coalition = coalition
-            a.coalition = Coalition()
+            a.coalition = Coalition(1)
             return [a, b, c]
 
         print("No coalition formed")
