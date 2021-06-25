@@ -148,7 +148,7 @@ class Game:
     def block_parse_inputs(self, inputs):
         action = ''
         while (len(inputs['keys']) == 0):
-            inputs = INPUTS.get_input()
+            inputs = self.INPUTS.get_input()
         action = inputs['keys'][0]
         return action
 
@@ -156,7 +156,7 @@ class Game:
         if(self.can_move(board, player, action)):
             player.update(action, True, board, guards)
         else:
-            player.update(action, False, board, guards)
+            player.update(action, True, board, guards)
 
     def can_move(self, board, player, action):
         move = True
