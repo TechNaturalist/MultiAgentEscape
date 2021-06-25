@@ -37,7 +37,7 @@ class OptionsItem:
 class OptionsMenu:
     def __init__(self):
         self.items = [
-            OptionsItem('Maps',  {'x':25, 'y': 30},   ['Map1','Map2','Map3','Map4','Map5'],  {'x': 75, 'y': 30}, 18, True),
+            OptionsItem('Maps',  {'x':25, 'y': 30},   ['Map1','Map2','Map3','Map4','Map5', 'all'],  {'x': 75, 'y': 30}, 18, True),
             OptionsItem('Player',  {'x':25, 'y': 40},   ['Agent - AI', 'Agent - Player'],  {'x': 75, 'y': 40}, 18, True),
         ]
         self.titleSize = "30"
