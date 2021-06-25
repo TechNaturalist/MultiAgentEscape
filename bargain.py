@@ -13,11 +13,8 @@ from random import randint, random
 BRIBE_AMOUNT = 25
 
 
-def bribe(player: AbstractAgent, agent: GuardAgent)\
-        -> Tuple[AbstractAgent,
-                 AbstractAgent,
-                 bool]:
-    """Determines whether a player will bribe a guard based on 
+def bribe(player: AbstractAgent, agent: GuardAgent) -> bool:
+    """Determines whether a player will bribe a guard based on
     a bimatrix decision
 
     Returns:
@@ -38,36 +35,32 @@ def bribe(player: AbstractAgent, agent: GuardAgent)\
                    (player.weapon - agent.get_perceived_power(),
                    BRIBE_AMOUNT)],
                   [(player.gold - agent.get_perceived_power(),
-                   player.get_perceived_power()),
+                   player.get_perceived_power() + BRIBE_AMOUNT // agent.coalition.member_count),  # noqa: E501
                    (player.gold,
                    BRIBE_AMOUNT)]]
 
         print(f"| {matrix[0][0]} | {matrix[0][1]} |")
         print(f"| {matrix[1][0]} | {matrix[1][1]} |")
 
-        p, q = mixed_strategy_2x2(matrix)
+        p, q = get_p_q(matrix)
 
         print(f"p = {p:.4f}")
         print(f"q = {q:.4f}")
 
-        if p is None or q is None:
+        if p is None or q is None or p == 0 or q == 0:
             bribe_success = False
-            return player, agent, bribe_success
-
+            return bribe_success
+        
         if 0 <= p <= 1 and 0 <= q <= 1:
-            if (p == 0 and q == 0) or \
+            if (p == 1 and q == 1) or \
                     random() < (1 - p) and random() < (1 - q):
-                agent.bribe_offered = True
-                player.gold -= BRIBE_AMOUNT
-                agent.gold += BRIBE_AMOUNT
                 bribe_success = True
-                agent.is_bribed = True
                 print("The guard accepted the bribe")
-                return player, agent, bribe_success
+                return bribe_success
 
     bribe_success = False
     print("The guard rejected the bribe...")
-    return player, agent, bribe_success
+    return bribe_success
 
 
 def mixed_strategy_2x2(matrix: List[List[Tuple[int, int]]]) \

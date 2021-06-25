@@ -11,7 +11,6 @@ import bargain
 
 if TYPE_CHECKING:
     from tile import Tile
-    from guard_agent import GuardAgent
 
 
 class PlayerAgent(AbstractAgent):
