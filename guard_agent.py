@@ -24,7 +24,7 @@ attitude = {
 class GuardAgent(AbstractAgent):
     def __init__(self, position: Tuple[int, int]) -> None:
         super().__init__(position)
-        self.coalition: Coalition
+        self.coalition = None
         self.skill = random.randint(1, 5)
         self.attitude = random.choice(list(attitude.values()))
         self.is_bribed = False
