@@ -19,7 +19,12 @@ def main():
     while True:
         #menu_options = menu.start()
         menu_options = {'guards': 3}
-        game.start(menu_options)
+        gold = 0
+        for i in range(5):
+            gold += game.start(menu_options, i)
+        print(f"The Thief was able to steal a total of {gold} gold!")
+        print("Thank you for playing!")
+        break
 
 
 if __name__ == '__main__':
