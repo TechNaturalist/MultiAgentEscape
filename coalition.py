@@ -27,7 +27,7 @@ class Coalition:
         print("Guards forming coalition")
         a = guards[0]
         b = guards[1]
-        c = guards[3]
+        c = guards[2]
         v = {}  # subset values
         v['a'] = a.weapon
         v['b'] = b.weapon
@@ -47,9 +47,9 @@ class Coalition:
 
         a_shap, b_shap, c_shap = Coalition.shapley_calc_3x(v)
 
-        if v['ab'] + v['c'] > v['abc'] and \
-            v['ac'] + v['b'] > v['abc'] and \
-                v['bc'] + v['a'] > v['abc']:
+        if v['ab'] + v['c'] < v['abc'] and \
+            v['ac'] + v['b'] < v['abc'] and \
+                v['bc'] + v['a'] < v['abc']:
             print("All guards joined coalition")
             coalition = Coalition()
             a.coalition = coalition

@@ -1,5 +1,4 @@
 from __future__ import annotations
-from coalition import Coalition
 from math import acos
 import random
 from tile import Tile
