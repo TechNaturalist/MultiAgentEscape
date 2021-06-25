@@ -34,8 +34,8 @@ def bribe(player: AbstractAgent, agent: GuardAgent)\
 
         p, q = mixed_strategy_2x2(matrix)
 
-        print(f"p = {p}")
-        print(f"q = {q}")
+        print(f"p = {p:.4f}")
+        print(f"q = {q:.4f}")
 
         if p is None or q is None:
             bribe_success = False
@@ -78,17 +78,21 @@ def mixed_strategy_2x2(matrix: List[List[Tuple[int, int]]]) \
     c_d = m[1, 1][1]
 
     r_a = m[0, 0][0]
-    r_b = m[1, 0][0]
-    r_c = m[0, 1][0]
+    r_b = m[0, 1][0]
+    r_c = m[1, 0][0]
     r_d = m[1, 1][0]
 
     p = None
     if (c_a - c_b - c_c + c_d) != 0:
         p = (c_d - c_b)/(c_a - c_b - c_c + c_d)
+    if r_a < r_c and r_b < r_d:
+        p = 0
 
     q = None
     if (r_a - r_b - r_c + r_d) != 0:
-        q = (r_d - r_c)/(r_a - r_b - r_c + r_d)
+        q = (r_d - r_b)/(r_a - r_b - r_c + r_d)
+    if c_a < c_c and c_b < c_d:
+        q = 0
 
     return (p, q)
 

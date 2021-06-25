@@ -35,6 +35,7 @@ def start(options, map_num):
 
     initiative = [player] + guards
 
+    update(player)
     while not game_map:
         if type(player).__name__ == 'HumanAgent':
             action = parse_inputs(INPUTS.get_input())
@@ -43,7 +44,10 @@ def start(options, map_num):
         game_map = update(curr_agent)
         initiative.append(curr_agent)
         render()
-    print(f"The Thief escaped with {player.gold} gold!")
+    if player.gold == 0:
+        print("The Thief was captured and the gold was returned.")
+    else:
+        print(f"The Thief escaped with {player.gold} gold!")
     return player.gold
 
 
@@ -129,7 +133,7 @@ def render():
     RENDERER.finish_rendering()
 
     if type(player).__name__ == 'PlayerAgent':
-        pygame.time.wait(50)
+        pygame.time.wait(30)
 
 
 def create_board(board_width, walls, guards, player, door):
