@@ -1,7 +1,10 @@
 from __future__ import annotations
 from coalition import Coalition
-from typing import Tuple, List
 
+"""The main game logic
+
+Written by: Dick Loveland, Nathan Holst, Max Clark
+"""
 import pygame
 from tile import Tile
 from inputs import Inputs
@@ -9,7 +12,6 @@ from renderer import Renderer
 from maps import Map1, Map2, Map3, Map4, Map5
 from percept import see, hear
 import a_star
-import random
 
 render_list = []
 board = []
@@ -51,14 +53,24 @@ def start(options, map_num):
     return player.gold
 
 
-def game_init(options, map_num):
+def game_init(options, map_num: int):
+    """Initializes the game with supplied options
+
+    Args:
+        options (List[str]): A list of string options
+        map_num (int): The map number to use
+    """
     global guards, board, player, walls, door, player_path, traveled
 
     game_maps = [Map1, Map2, Map3, Map4, Map5]
 
     guards = game_maps[map_num].guards
     player = game_maps[map_num].player
-    board = create_board(game_maps[map_num].size, game_maps[map_num].walls, game_maps[map_num].guards, game_maps[map_num].player, game_maps[map_num].door)
+    board = create_board(game_maps[map_num].size,
+                         game_maps[map_num].walls,
+                         game_maps[map_num].guards,
+                         game_maps[map_num].player,
+                         game_maps[map_num].door)
     walls = wall_tiles(game_maps[map_num].walls)
     door = board[game_maps[map_num].door[0]][game_maps[map_num].door[1]]
 
@@ -194,4 +206,3 @@ def can_move(board, player, action):
                 or board[player.position[0] + 1][player.position[1]].is_wall):
             move = False
     return move
-

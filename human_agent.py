@@ -1,8 +1,15 @@
+"""A class to handle human players playing as
+the thief.
+
+Written by: Max Clark, Nathan Holst
+"""
 from __future__ import annotations
-from tile import Tile
-from typing import List
+from typing import List, TYPE_CHECKING, Tuple
 from abstract_agent import AbstractAgent, KNIFE
 from percept import see
+
+if TYPE_CHECKING:
+    from tile import Tile
 
 
 class HumanAgent(AbstractAgent):
@@ -14,13 +21,21 @@ class HumanAgent(AbstractAgent):
         self.is_player = True
         self.conflict = False
 
-    def update(self, action, can_move, board, guards):
+    def update(self,
+               board: List[List[Tile]],
+               player_path: List[Tile],
+               traveled,
+               guards: List[AbstractAgent],
+               player: AbstractAgent,
+               door: Tile,
+               can_move):
+
         perceive = see(self, board)
-        is_guard = None
+        # is_guard = None
         g_list = self.guard_tiles(guards, board)
         for g in g_list:
             if g in perceive:
-                is_guard = g
+                # is_guard = g
                 self.conflict = True
 
         if not self.conflict and can_move:
@@ -43,7 +58,6 @@ class HumanAgent(AbstractAgent):
             for tile in self.look_around(board):
                 self.RENDERER.color_tile(tile, self.RENDERER.WHITE)
         self.RENDERER.draw_player(self)
-
 
     def guard_tiles(self, guard_obj, board):
         guard_list = []

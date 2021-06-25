@@ -1,8 +1,13 @@
+"""An abstract class for agents. Provides base functionality
+for all agents.
+
+Written by: Max Clark, Nathan Holst
+"""
+
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from dice import roll_dice
-from tile import Tile
-from typing import List, TYPE_CHECKING, Tuple, Union
+from typing import Tuple
 from renderer import Renderer
 from percept import see, hear
 
@@ -15,11 +20,6 @@ BANANA = 9000
 
 class AbstractAgent(ABC):
     RENDERER = Renderer.get_instance()
-
-    if TYPE_CHECKING:
-        from human_agent import HumanAgent
-        from player_agent import PlayerAgent
-        from guard_agent import GuardAgent
 
     def __init__(self, position: Tuple[int, int]) -> None:
         self.position = position
@@ -35,12 +35,10 @@ class AbstractAgent(ABC):
 
     def look_around(self, board):
         """Looks around and returns a 2D array of tiles around"""
-        # TODO: Add look around code
         return see(self, board)
 
     def listen(self, board):
         """Listens and returns a 2D array of objects heard"""
-        # TODO: Add listen code
         return hear(self, board)
 
     def fight(self, agent):

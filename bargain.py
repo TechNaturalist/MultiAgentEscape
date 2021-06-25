@@ -1,3 +1,8 @@
+"""A class to handle barganing/bribing between
+the thief and guards.
+
+Written by: Max Clark, Nathan Holst
+"""
 from guard_agent import GuardAgent
 from typing import List, Tuple, Union
 from abstract_agent import AbstractAgent
@@ -9,7 +14,16 @@ BRIBE_AMOUNT = 25
 
 
 def bribe(player: AbstractAgent, agent: GuardAgent)\
-        -> Tuple[AbstractAgent, AbstractAgent, bool]:
+        -> Tuple[AbstractAgent,
+                 AbstractAgent,
+                 bool]:
+    """Determines whether a player will bribe a guard based on 
+    a bimatrix decision
+
+    Returns:
+        Tuple: The player, guard, and whether the bribe was
+        successful
+    """
 
     # Form matrix:
     #              kill    bribe
@@ -31,7 +45,6 @@ def bribe(player: AbstractAgent, agent: GuardAgent)\
         print(f"| {matrix[0][0]} | {matrix[0][1]} |")
         print(f"| {matrix[1][0]} | {matrix[1][1]} |")
 
-
         p, q = mixed_strategy_2x2(matrix)
 
         print(f"p = {p:.4f}")
@@ -50,11 +63,11 @@ def bribe(player: AbstractAgent, agent: GuardAgent)\
                 bribe_success = True
                 agent.is_bribed = True
                 print("The guard accepted the bribe")
-                return bribe_success
+                return player, agent, bribe_success
 
     bribe_success = False
     print("The guard rejected the bribe...")
-    return bribe_success
+    return player, agent, bribe_success
 
 
 def mixed_strategy_2x2(matrix: List[List[Tuple[int, int]]]) \
@@ -99,6 +112,12 @@ def mixed_strategy_2x2(matrix: List[List[Tuple[int, int]]]) \
 
 def pure_strategy_2x2(matrix: List[List[Tuple[int, int]]]) \
         -> List[Tuple[int, int]]:
+    """Soves pure strategy (i.e., Nash Equilibria) for 
+    2x2 bimatricies
+
+    Returns:
+        Tuple[int, int]: p/q pure strategy solutions
+    """
     col_strategies = []
     row_strategies = []
 
@@ -131,6 +150,12 @@ def pure_strategy_2x2(matrix: List[List[Tuple[int, int]]]) \
 
 def get_p_q(matrix: List[List[Tuple[int, int]]]) \
         -> Tuple[float, float]:
+    """Calculates p an q based on pure and mixed
+    strategies
+
+    Returns:
+        Tuple[float, float]: The p/q value
+    """
     mixed_p, mixed_q = mixed_strategy_2x2(matrix)
     pure_solution = pure_strategy_2x2(matrix)
 

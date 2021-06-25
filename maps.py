@@ -1,3 +1,7 @@
+"""Map and player configurations for the game.
+
+Written by: Nathan Holst
+"""
 from player_agent import PlayerAgent
 from guard_agent import GuardAgent
 from human_agent import HumanAgent

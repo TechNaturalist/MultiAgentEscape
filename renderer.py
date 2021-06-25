@@ -1,13 +1,9 @@
-from __future__ import annotations
-from tile import Tile
-from typing import Literal, TYPE_CHECKING, Tuple, Union
+"""A rendering class for pygame
+
+Written by: Dick Loveland, Nathan Holst, Max Clark
+"""
 import pygame
 import math
-
-if TYPE_CHECKING:
-    from human_agent import HumanAgent
-    from player_agent import PlayerAgent
-    from guard_agent import GuardAgent
 
 WIDTH = 640
 HEIGHT = 640

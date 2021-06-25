@@ -1,4 +1,7 @@
-import pygame
+"""The menu for the game.
+
+Written by: Dick Loveland
+"""
 from pygame.locals import *
 from renderer import Renderer
 from inputs import Inputs
@@ -31,6 +34,7 @@ def update():
     nex = menu_stack[last].get_next_action()
     menu_stack = next_instruction(nex)
 
+
 def render():
     global menu_stack, last
     RENDERER.menu_background()
@@ -42,7 +46,7 @@ def next_instruction(action):
     global last, menu_stack
     if (action == 'pop'):
         menu_stack.pop()
-        #menu_stack = menu_stack[:-1]
+        # menu_stack = menu_stack[:-1]
         last = last - 1
     elif (action == 'addOption'):
         menu_stack.append(OptionsMenu())
