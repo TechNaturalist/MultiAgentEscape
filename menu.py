@@ -16,7 +16,7 @@ last = 0
 
 options = {
     'map': 0,
-    'player': 1
+    'player': 0
 }
 
 

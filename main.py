@@ -1,5 +1,3 @@
-# Game main By Dick Loveland
-
 import pygame
 import helper
 import game
@@ -19,9 +17,8 @@ def main():
     while True:
       
         menu_options = menu.start()
-        game.start(menu_options)
+        gold = game.start(menu_options)
 
-        #gold = 0
         #for i in range(5):
         #    gold += game.start(menu_options, i)
         print(f"The Thief was able to steal a total of {gold} gold!")

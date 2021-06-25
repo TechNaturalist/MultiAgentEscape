@@ -22,10 +22,7 @@ traveled = []
 
 BOARD_WIDTH = 20
 
-#Syntactic sugary goodness
-MAPS = [Map1(), Map2(), Map3(), Map4(), Map5()]
-
-def start(options, map_num):
+def start(options):
     global RENDERER, INPUTS, action
 
     RENDERER = Renderer.get_instance()
@@ -33,21 +30,20 @@ def start(options, map_num):
     game_map = False
     action = ''
 
-    game_init(options, map_num)
+    game_init(options)
 
     initiative = [player] + guards
 
 
-    update(player)
+    update(player, action)
     render()
     while not game_map:
-        if type(player).__name__ == 'HumanAgent':
-            action = block_parse_inputs(INPUTS.get_input())
         curr_agent = initiative.pop(0)
+        if (type(player).__name__ == 'HumanAgent'
+            and type(curr_agent).__name__ == 'HumanAgent'):
+            action = block_parse_inputs(INPUTS.get_input())
         # Run agents turn.
-        #game_map = update(curr_agent)
-        game_map = update(action, action)
-        print(game_map)
+        game_map = update(curr_agent, action)
         initiative.append(curr_agent)
         render()
     if player.gold == 0:
@@ -57,15 +53,11 @@ def start(options, map_num):
     return player.gold
 
 
-
-    print("returning")
-    return
-
 def game_init(options):
     global guards, board, player, walls, door, player_path, traveled
     
     game_maps = [Map1, Map2, Map3, Map4, Map5]
-    Map = MAPS[options['map']]
+    Map = game_maps[options['map']]
     guards = Map.guards
     board = create_board(Map.size, Map.walls, Map.guards, Map.player, Map.door)
     walls = wall_tiles(Map.walls)
@@ -99,7 +91,7 @@ def update(agent, action):
         agent.update(board, player_path, traveled, guards, player, door)
     else:
         agent.update(board, player_path, traveled, guards, player, door)
-
+        pass
     if player.position == door.position or len(player_path) < 1:
         # Win condition
         # TODO: Add win condition logic/display
@@ -110,6 +102,7 @@ def update(agent, action):
 
 
 def render():
+    print("render")
     RENDERER.game_background()
     for sprite in render_list:
         RENDERER.draw_tile(sprite)
