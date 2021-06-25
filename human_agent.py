@@ -1,20 +1,29 @@
-from __future__ import annotations
-from tile import Tile
-from typing import List
-from abstract_agent import AbstractAgent
+from typing import List, Tuple
+from abstract_agent import AbstractAgent, KNIFE
 
 
 class HumanAgent(AbstractAgent):
-    def __init__(self, position) -> None:
+
+    def __init__(self, position: Tuple[int, int]) -> None:
         super().__init__(position)
+        self.gold = 100
+        self.weapon = KNIFE
+        self.is_player = True
+        self.conflict = False
 
-    def get_movement(self):
-        """Get the current player movement from pygame. Not necessary when an
-        agent player is playing."""
-        pass
-
-    def update(self):
-        return self
+    def update(self, action, can_move):
+        if(not self.conflict and can_move):
+            if(action == 'up'):
+                self.position =(self.position[0], self.position[1] - 1)
+            elif( action == 'down'):
+                self.position =(self.position[0], self.position[1] + 1)
+            elif(action == 'left'):
+                self.position =(self.position[0] - 1, self.position[1])
+            elif(action == 'right'):
+                self.position =(self.position[0] +1, self.position[1])
+            else:
+                ##conflict menu
+                pass
 
     def render(self, board):
         if self.debug:

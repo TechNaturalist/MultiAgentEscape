@@ -17,10 +17,9 @@ def main():
     pygame.display.set_caption(GAMECAPTION)
 
     while True:
-        #menu_options = menu.start()
-        menu_options = {'guards': 3}
+        print("starting")
+        menu_options = menu.start()
         game.start(menu_options)
-
 
 if __name__ == '__main__':
     main()

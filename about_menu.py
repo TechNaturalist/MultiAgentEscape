@@ -8,26 +8,26 @@ class AboutMenu:
 
     def __init__(self):
         self.text1 = ("Credits: ", 
-                      {'x': 50,'y': 10 }, 
+                      {'x': 45,'y': 10 }, 
                       'basic', 
                       AboutMenu.renderer.WHITE)
         self.text2 = ("Max Clark", 
-                      {'x': 50,'y': 30 }, 
+                      {'x': 45,'y': 30 }, 
                       'basic', 
                       AboutMenu.renderer.WHITE)
         self.text3 = ("Nathan Holst", 
-                      {'x': 50,'y': 40 }, 
+                      {'x': 45,'y': 40 }, 
                       'basic', 
                       AboutMenu.renderer.WHITE)
         self.text4 = ("Dick Loveland", 
-                      {'x': 50,'y': 50 }, 
+                      {'x': 45,'y': 50 }, 
                       'basic', 
                       AboutMenu.renderer.WHITE)
         self.next_action = ''
 
     def update(self, inputs, options):
         if(len(inputs['keys']) != 0):
-            if(inputs['keys'][0] == 'back'):
+            if(inputs['keys'][0] == 'back' or inputs['keys'][0] == 'enter'):
                 self.next_action = 'pop'
         return options
 
