@@ -23,7 +23,7 @@ traveled = []
 BOARD_WIDTH = 20
 
 
-def start(options):
+def start(options, map_num):
     global RENDERER, INPUTS, action
 
     RENDERER = Renderer.get_instance()
@@ -31,7 +31,7 @@ def start(options):
     game_map = False
     action = ''
 
-    game_init(options)
+    game_init(options, map_num)
 
     initiative = [player] + guards
 
@@ -43,18 +43,20 @@ def start(options):
         game_map = update(curr_agent)
         initiative.append(curr_agent)
         render()
-    
-    if player.is_dead:
-        print("Oh no! The player died")
-        exit()
-    else:
-        print("The player reached the exit!")
-        print(f"The player had {player.gold} gold")
-        exit()
+    print(f"The Thief escaped with {player.gold} gold!")
+    return player.gold
 
 
-def game_init(options):
+def game_init(options, map_num):
     global guards, board, player, walls, door, player_path, traveled
+
+    game_maps = [Map1, Map2, Map3, Map4, Map5]
+
+    guards = game_maps[map_num].guards
+    player = game_maps[map_num].player
+    board = create_board(game_maps[map_num].size, game_maps[map_num].walls, game_maps[map_num].guards, game_maps[map_num].player, game_maps[map_num].door)
+    walls = wall_tiles(game_maps[map_num].walls)
+    door = board[game_maps[map_num].door[0]][game_maps[map_num].door[1]]
 
     # guards = Map1.guards
     # player = Map1.player
@@ -68,12 +70,12 @@ def game_init(options):
     # walls = wall_tiles(Map2.walls)
     # door = board[Map2.door[0]][Map2.door[1]]
 
-    guards = Map3.guards
-    player = Map3.player
-    board = create_board(Map3.size, Map3.walls,
-                         Map3.guards, Map3.player, Map3.door)
-    walls = wall_tiles(Map3.walls)
-    door = board[Map3.door[0]][Map3.door[1]]
+    # guards = Map3.guards
+    # player = Map3.player
+    # board = create_board(Map3.size, Map3.walls,
+    #                      Map3.guards, Map3.player, Map3.door)
+    # walls = wall_tiles(Map3.walls)
+    # door = board[Map3.door[0]][Map3.door[1]]
 
     # guards = Map4.guards
     # player = Map4.player
