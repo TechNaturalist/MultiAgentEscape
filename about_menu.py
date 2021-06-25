@@ -42,7 +42,7 @@ class AboutMenu:
             [type]: [description]
         """
         if(len(inputs['keys']) != 0):
-            if(inputs['keys'][0] == 'back'):
+            if(inputs['keys'][0] == 'back' or inputs['keys'][0] == 'enter'):
                 self.next_action = 'pop'
         return options
 

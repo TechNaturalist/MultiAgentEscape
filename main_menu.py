@@ -82,7 +82,6 @@ class MainMenu:
             self.items[self.stateIndex].highlighted = True
         else:
             pass
-        print(self.state)
 
     def render(self):
         renderer.draw_text(
