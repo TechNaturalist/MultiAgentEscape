@@ -26,7 +26,6 @@ BOARD_WIDTH = 20
 def start(options):
     global RENDERER, INPUTS, action
 
-    print("hello")
     RENDERER = Renderer.get_instance()
     INPUTS = Inputs.get_instance()
     game_map = False
@@ -44,6 +43,7 @@ def start(options):
         game_map = update(curr_agent)
         initiative.append(curr_agent)
         render()
+    print(player.gold)
 
 
 def game_init(options):
@@ -54,7 +54,7 @@ def game_init(options):
     # board = create_board(Map1.size, Map1.walls, Map1.guards, Map1.player, Map1.door)
     # walls = wall_tiles(Map1.walls)
     # door = board[Map1.door[0]][Map1.door[1]]
-
+    #
     # guards = Map2.guards
     # player = Map2.player
     # board = create_board(Map2.size, Map2.walls, Map2.guards, Map2.player, Map2.door)
@@ -73,7 +73,7 @@ def game_init(options):
     # board = create_board(Map4.size, Map4.walls, Map4.guards, Map4.player, Map4.door)
     # walls = wall_tiles(Map4.walls)
     # door = board[Map4.door[0]][Map4.door[1]]
-    #
+
     # guards = Map5.guards
     # player = Map5.player
     # board = create_board(Map5.size, Map5.walls, Map5.guards, Map5.player, Map5.door)

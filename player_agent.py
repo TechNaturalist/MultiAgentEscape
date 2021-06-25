@@ -8,6 +8,8 @@ class PlayerAgent(AbstractAgent):
 
     def __init__(self, position: Tuple[int, int]) -> None:
         super().__init__(position)
+        self.hp = 20
+        self.total_hp = 20
         self.gold = 100
         self.weapon = KNIFE
         self.is_player = True
@@ -32,6 +34,11 @@ class PlayerAgent(AbstractAgent):
         else:
             current_player_tile.set_agent(self)
             # react to guard
+            is_guard.agent.is_bribed = True
+            is_guard.agent.gold += 25
+            self.gold -= 25
+            guards.remove(is_guard.agent)
+
             pass
 
     def render(self, board):
