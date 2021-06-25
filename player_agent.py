@@ -32,6 +32,11 @@ class PlayerAgent(AbstractAgent):
         else:
             current_player_tile.set_agent(self)
             # react to guard
+            is_guard.agent.is_bribed = True
+            is_guard.agent.gold += 25
+            self.gold -= 25
+            guards.remove(is_guard.agent)
+
             pass
 
     def render(self, board):
