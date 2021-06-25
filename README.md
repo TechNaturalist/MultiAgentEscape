@@ -68,4 +68,4 @@ coalitions are hard to get.
 
 ### Shapley Value
 The Shapley value for the guards' coalition is calculated
-to influence payouts.
+to influence payouts. 
