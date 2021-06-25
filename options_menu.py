@@ -1,3 +1,8 @@
+"""The options menu for the game.
+
+Written by: Dick Loveland
+"""
+from typing import Dict, List
 from renderer import Renderer
 from inputs import Inputs
 
@@ -8,7 +13,13 @@ inputs = Inputs.get_instance()
 # Helper Class for organization #
 
 class OptionsItem:
-    def __init__(self, title, title_center ,options, center, size, highlighted):
+    def __init__(self,
+                 title: str,
+                 title_center: Dict[str, int],
+                 options: List[str],
+                 center: Dict[str, int],
+                 size: int,
+                 highlighted: bool):
         self.title = title
         self.title_center = title_center
         self.options = options
@@ -17,19 +28,25 @@ class OptionsItem:
         self.size = size
         self.highlighted = highlighted
 
-    def next_item(self,instruct):
+    def next_item(self, instruct):
         if(instruct == 'right'):
-            self.state = (self.state + len(self.options) + 1) % len(self.options)
+            self.state = (self.state + len(self.options) +
+                          1) % len(self.options)
         elif(instruct == 'left'):
-            self.state = (self.state + len(self.options) - 1) % len(self.options)
+            self.state = (self.state + len(self.options) -
+                          1) % len(self.options)
 
     def render(self):
         if not self.highlighted:
-            renderer.draw_text(self.title, self.title_center, 'menu', Renderer.WHITE)
-            renderer.draw_text(self.options[self.state], self.center, 'menu', Renderer.WHITE)
+            renderer.draw_text(self.title, self.title_center,
+                               'menu', Renderer.WHITE)
+            renderer.draw_text(
+                self.options[self.state], self.center, 'menu', Renderer.WHITE)
         else:
-            renderer.draw_text(self.title, self.title_center, 'menu', Renderer.WHITE)
-            renderer.draw_text(self.options[self.state], self.center, 'menu', Renderer.GREEN)
+            renderer.draw_text(self.title, self.title_center,
+                               'menu', Renderer.WHITE)
+            renderer.draw_text(
+                self.options[self.state], self.center, 'menu', Renderer.GREEN)
 
 
 # Main Class #
@@ -37,8 +54,19 @@ class OptionsItem:
 class OptionsMenu:
     def __init__(self):
         self.items = [
-            OptionsItem('Maps',  {'x':25, 'y': 30},   ['Map1','Map2','Map3','Map4','Map5', 'all'],  {'x': 75, 'y': 30}, 18, True),
-            OptionsItem('Player',  {'x':25, 'y': 40},   ['Agent - AI', 'Agent - Player'],  {'x': 75, 'y': 40}, 18, True),
+            OptionsItem('Maps',
+                        {'x': 25, 'y': 30},
+                        ['Map1', 'Map2', 'Map3', 'Map4', 'Map5', 'all'],
+                        {'x': 75, 'y': 30},
+                        18,
+                        True),
+
+            OptionsItem('Player',
+                        {'x': 25, 'y': 40},
+                        ['Agent - AI', 'Agent - Player'],
+                        {'x': 75, 'y': 40},
+                        18,
+                        True),
         ]
         self.titleSize = "30"
         self.title = "Options"
@@ -46,8 +74,7 @@ class OptionsMenu:
         self.stateIndex = 0
 
     def update(self, inputs, options):
-
-        self.set_options(options);
+        self.set_options(options)
 
         if (len(inputs['keys']) != 0):
             if (inputs['keys'][0] == 'back' or inputs['keys'][0] == 'enter'):
@@ -84,7 +111,6 @@ class OptionsMenu:
             self.items[0].state = options['map']
         except:
             self.items[0].state = 0
-
 
     def render(self):
         renderer.draw_text(

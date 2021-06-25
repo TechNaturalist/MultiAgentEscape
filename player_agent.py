@@ -1,8 +1,16 @@
-from typing import List, Tuple
+"""Agent to play the game as the player.
+
+Written by: Max Clark, Nathan Holst
+"""
+
+from __future__ import annotations
+from typing import List, TYPE_CHECKING, Tuple
 from abstract_agent import AbstractAgent, KNIFE
 from percept import see
 import bargain
-import tile
+
+if TYPE_CHECKING:
+    from tile import Tile
 
 
 class PlayerAgent(AbstractAgent):
@@ -16,7 +24,14 @@ class PlayerAgent(AbstractAgent):
         self.is_player = True
         self.conflict = False
 
-    def update(self, board, player_path, traveled, guards, player, door):
+    def update(self,
+               board: List[List[Tile]],
+               player_path: List[Tile],
+               traveled,
+               guards: List[AbstractAgent],
+               player: AbstractAgent,
+               door: Tile):
+
         perceive = see(self, board)
         is_guard = None
         g_list = self.guard_tiles(guards, board)

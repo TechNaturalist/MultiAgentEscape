@@ -1,3 +1,7 @@
+"""The main menu for the game.
+
+Written by: Dick Loveland
+"""
 from renderer import Renderer
 from inputs import Inputs
 import helper

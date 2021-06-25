@@ -1,7 +1,9 @@
+"""The main game logic
+
+Written by: Dick Loveland, Nathan Holst, Max Clark
+"""
 from __future__ import annotations
 from coalition import Coalition
-from typing import Tuple, List
-import copy
 import pygame
 from tile import Tile
 from inputs import Inputs
@@ -9,7 +11,6 @@ from renderer import Renderer
 from maps import Map1, Map2, Map3, Map4, Map5
 from percept import see, hear
 import a_star
-import random
 
 BOARD_WIDTH = 20
 
@@ -17,7 +18,7 @@ BOARD_WIDTH = 20
 class Game:
     RENDERER = Renderer.get_instance()
     INPUTS = Inputs.get_instance()
- 
+
     def __init__(self):
         self.game_map = False
         self.render_list = []
@@ -31,7 +32,7 @@ class Game:
         self.traveled = []
         self.initiative = []
 
-    def start(self,options):
+    def start(self, options):
 
         self.game_init(options)
         self.initiative = [self.player] + self.guards
@@ -41,7 +42,7 @@ class Game:
             curr_agent = self.initiative.pop(0)
             action = ''
             if (type(self.player).__name__ == 'HumanAgent'
-                and type(curr_agent).__name__ == 'HumanAgent'):
+                    and type(curr_agent).__name__ == 'HumanAgent'):
                 action = self.block_parse_inputs(Game.INPUTS.get_input())
             # Run agents turn.
             self.game_map = self.update(curr_agent, action)
@@ -53,11 +54,12 @@ class Game:
             print(f"The Thief escaped with {self.player.gold} gold!")
         return self.player.gold
 
-    def game_init(self,options):
+    def game_init(self, options):
         game_maps = [Map1(), Map2(), Map3(), Map4(), Map5()]
         self.Map = game_maps[options['map']]
         self.guards = self.Map.guards
-        self.board = self.create_board(self.Map.size, self.Map.walls, self.Map.guards, self.Map.player, self.Map.door)
+        self.board = self.create_board(
+            self.Map.size, self.Map.walls, self.Map.guards, self.Map.player, self.Map.door)
         self.walls = self.wall_tiles(self.Map.walls)
         self.door = self.board[self.Map.door[0]][self.Map.door[1]]
 
@@ -66,7 +68,8 @@ class Game:
         else:
             self.player = self.Map.human
 
-        self.player_path = a_star.a_star(self.board, self.player.position, self.door.position)
+        self.player_path = a_star.a_star(
+            self.board, self.player.position, self.door.position)
         self.guards = Coalition.form_coalition(self.guards)
         self.traveled = []
 
@@ -84,14 +87,15 @@ class Game:
         if classname == 'HumanAgent':
             self.player_move(self.board, agent, action)
         elif classname == 'PlayerAgent':
-            agent.update(self.board, self.player_path, self.traveled, self.guards, self.player, self.door)
+            agent.update(self.board, self.player_path, self.traveled,
+                         self.guards, self.player, self.door)
         else:
-            agent.update(self.board, self.player_path, self.traveled, self.guards, self.player, self.door)
+            agent.update(self.board, self.player_path, self.traveled,
+                         self.guards, self.player, self.door)
 
         if self.player.position == self.door.position or len(self.player_path) < 1:
-        # Win condition
-        # TODO: Add win condition logic/display
-            print("hello")
+            # Win condition
+            # TODO: Add win condition logic/display
             end_game = True
 
         return end_game
@@ -112,7 +116,7 @@ class Game:
 
     def create_board(self, board_width, walls, guards, player, door):
         game_board = [[Tile((x, y)) for y in range(board_width)]
-                  for x in range(board_width)]
+                      for x in range(board_width)]
 
         for wall in walls:
             game_board[wall[0]][wall[1]].is_wall = True
@@ -127,7 +131,6 @@ class Game:
 
         return game_board
 
-
     def wall_tiles(self, wall_coord):
         wall_list = []
         for wall in wall_coord:
@@ -138,6 +141,7 @@ class Game:
         action = ''
         while (len(inputs['keys']) == 0):
             inputs=self.INPUTS.get_input()
+
         action = inputs['keys'][0]
         return action
 
@@ -147,23 +151,23 @@ class Game:
         else:
             player.update(action, False, board, self.guards)
 
+
     def can_move(self, board, player, action):
         move = True
         if(action == 'down'):
             if (player.position[1] == 19
-                or board[player.position[0]][player.position[1] + 1].is_wall):
+                    or board[player.position[0]][player.position[1] + 1].is_wall):
                 move = False
         if(action == 'up'):
             if (player.position[1] == 0
-                or board[player.position[0]][player.position[1] - 1].is_wall):
+                    or board[player.position[0]][player.position[1] - 1].is_wall):
                 move = False
         if(action == 'left'):
             if (player.position[0] == 0
-                or board[player.position[0] - 1][player.position[1]].is_wall):
+                    or board[player.position[0] - 1][player.position[1]].is_wall):
                 move = False
         if(action == 'right'):
             if (player.position[0] == 19
-                or board[player.position[0] + 1][player.position[1]].is_wall):
+                    or board[player.position[0] + 1][player.position[1]].is_wall):
                 move = False
         return move
-

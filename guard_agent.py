@@ -1,11 +1,18 @@
+"""A class which handles guards and guard interactions
+for the game.
+
+Written by: Max Clark, Nathan Holst
+"""
 from __future__ import annotations
-from math import acos
 import random
 from tile import Tile
-from typing import Dict, List, TYPE_CHECKING, Tuple
+from typing import List, TYPE_CHECKING, Tuple
 from abstract_agent import AbstractAgent
 from percept import see
 import a_star
+
+if TYPE_CHECKING:
+    from coalition import Coalition
 
 attitude = {
     'nice': 3,
@@ -24,7 +31,8 @@ class GuardAgent(AbstractAgent):
         self.bribe_offered = False
         self.on_trail = None
 
-    def update(self, board: List[List[Tile]],
+    def update(self,
+               board: List[List[Tile]],
                player_path: List[Tile],
                traveled,
                guards: List[AbstractAgent],
@@ -57,7 +65,8 @@ class GuardAgent(AbstractAgent):
                 next_pos = self.on_trail.pop(0)
                 self.position = next_pos
                 board[next_pos[0]][next_pos[1]].set_agent(self)
-        elif not self.is_bribed and bool(set(perceive).intersection(self.tiles(traveled, board))):
+        elif not self.is_bribed and \
+                bool(set(perceive).intersection(self.tiles(traveled, board))):
             self.on_trail = a_star.a_star(board, self.position, door.position)
             current_tile = board[self.position[0]][self.position[1]]
             current_tile.set_agent()

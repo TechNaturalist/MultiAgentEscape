@@ -1,3 +1,7 @@
+"""Helper methods for pygame
+
+Written by: Dick Loveland
+"""
 import pygame
 import sys
 

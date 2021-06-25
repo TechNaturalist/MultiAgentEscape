@@ -1,3 +1,7 @@
+"""A class to handle coalitions between the guards
+
+Written by: Max Clark, Nathan Holst
+"""
 import random
 from typing import Dict, List
 from guard_agent import GuardAgent
@@ -118,7 +122,7 @@ class Coalition:
         b_count /= 6
         c_count /= 6
 
-        print(f"Shapley values: a = {a_count:.4f}, b = {b_count:.4f}, c = {c_count:.4f}")
+        print(f"Shapley values: a = {a_count:.4f}, ", end="")
+        print(f"b = {b_count:.4f}, c = {c_count:.4f}")
 
         return a_count, b_count, c_count
-

@@ -1,5 +1,8 @@
-from __future__ import annotations
-from typing import List, Tuple, Union, TYPE_CHECKING
+"""A class to represent one tile on the game board
+
+Written by: Max Clark, Nathan Holst
+"""
+from typing import Tuple
 
 
 class Tile:

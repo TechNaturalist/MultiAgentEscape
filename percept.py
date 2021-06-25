@@ -1,10 +1,23 @@
 
+"""Finds tiles that are perceptible to agent.
+
+Written by: Nathan Holst
+"""
 # Returns what tiles on the board the agent can hear
 from typing import List
 from tile import Tile
 
 
 def hear(agent, board: List[List[Tile]]) -> List[Tile]:
+    """Get an agents perception of tiles based on hearing
+
+    Args:
+        agent (AbstractAgent): The agent who is listening
+        board (List[List[Tile]]): The game board
+
+    Returns:
+        List[Tile]: The tiles the agent can percieve
+    """
     x = agent.position[0]
     y = agent.position[1]
     tiles = []
@@ -120,6 +133,15 @@ def hear(agent, board: List[List[Tile]]) -> List[Tile]:
 
 # Returns what tiles on the board the agent can see
 def see(agent, board: List[List[Tile]]) -> List[Tile]:
+    """Get an agents perception of tiles based on sight
+
+    Args:
+        agent (AbstractAgent): The agent who is seeing
+        board (List[List[Tile]]): The game board
+
+    Returns:
+        List[Tile]: The tiles the agent can percieve
+    """
     x = agent.position[0]
     y = agent.position[1]
     tiles = [board[x][y]]

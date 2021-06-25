@@ -1,13 +1,9 @@
-from __future__ import annotations
-from tile import Tile
-from typing import Literal, TYPE_CHECKING, Tuple, Union
+"""A rendering class for pygame
+
+Written by: Dick Loveland, Nathan Holst, Max Clark
+"""
 import pygame
 import math
-
-if TYPE_CHECKING:
-    from human_agent import HumanAgent
-    from player_agent import PlayerAgent
-    from guard_agent import GuardAgent
 
 WIDTH = 640
 HEIGHT = 640
@@ -115,7 +111,8 @@ class Renderer:
         # pygame.draw.rect(self.display, color, tile_rect)
 
     def menu_background(self):
-        self.display.fill(Renderer.BLACK)
+        if self.display._pixels_address is not None:
+            self.display.fill(Renderer.BLACK)
 
     def game_background(self):
         if self.display._pixels_address is not None:
@@ -134,7 +131,7 @@ class Renderer:
                 self.draw_player(tile.agent)
             else:
                 self.draw_guard(tile.agent)
-    
+
     def draw_path(self, path):
         if path is not None:
             for tile in path:

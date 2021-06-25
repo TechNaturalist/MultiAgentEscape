@@ -1,3 +1,7 @@
+"""Input gathering through pygame for the game.
+
+Written by: Dick Loveland
+"""
 import pygame
 from pygame.locals import K_w, K_s, K_a, K_d, KEYDOWN, K_ESCAPE, K_RETURN
 

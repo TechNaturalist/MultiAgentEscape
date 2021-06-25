@@ -1,3 +1,8 @@
+"""The A star algorithm applied for our game.
+
+Written by: Max Clark
+"""
+
 from typing import List, Tuple
 from tile import Tile
 
