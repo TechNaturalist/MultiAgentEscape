@@ -31,7 +31,7 @@ class GuardAgent(AbstractAgent):
                traveled,
                guards: List[AbstractAgent],
                player: AbstractAgent,
-               door):
+               door: Tile):
 
         perceive = see(self, board)
         if board[player.position[0]][player.position[1]] in perceive:
