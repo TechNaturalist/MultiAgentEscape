@@ -32,12 +32,15 @@ def bribe(player: AbstractAgent, agent: GuardAgent)\
 
         p, q = mixed_strategy_2x2(matrix)
 
+        print(f"p = {p}")
+        print(f"q = {q}")
+
         if p is None or q is None:
             bribe_success = False
             return player, agent, bribe_success
 
-        if 0 < p <= 1 and 0 < q <= 1:
-            if (p == 1 and q == 1) or \
+        if 0 <= p <= 1 and 0 <= q <= 1:
+            if (p == 0 and q == 0) or \
                     random() < (1 - p) and random() < (1 - q):
                 agent.bribe_offered = True
                 player.gold -= BRIBE_AMOUNT
