@@ -37,14 +37,14 @@ class GuardAgent(AbstractAgent):
         if board[player.position[0]][player.position[1]] in perceive:
             # react to player character
             pass
-        elif self.on_trail is not None and not self.is_bribed:
+        elif not self.is_bribed and self.on_trail is not None:
             if len(self.on_trail) > 2:
                 current_tile = board[self.position[0]][self.position[1]]
                 current_tile.set_agent()
                 next_pos = self.on_trail.pop(0)
                 self.position = next_pos
                 board[next_pos[0]][next_pos[1]].set_agent(self)
-        elif bool(set(perceive).intersection(self.tiles(traveled, board))) and not self.is_bribed:
+        elif not self.is_bribed and bool(set(perceive).intersection(self.tiles(traveled, board))):
             self.on_trail = a_star.a_star(board, self.position, door.position)
             current_tile = board[self.position[0]][self.position[1]]
             current_tile.set_agent()
