@@ -80,9 +80,9 @@ class Renderer:
                            (xcenter, ycenter),
                            RADIUS)
 
-    def draw_player(self, guard):
-        xcenter = guard.position[0] * CELLSIZE + math.floor(CELLSIZE/2)
-        ycenter = guard.position[1] * CELLSIZE + math.floor(CELLSIZE/2)
+    def draw_player(self, player):
+        xcenter = player.position[0] * CELLSIZE + math.floor(CELLSIZE/2)
+        ycenter = player.position[1] * CELLSIZE + math.floor(CELLSIZE/2)
         pygame.draw.circle(self.display,
                            Renderer.BLUE,
                            (xcenter, ycenter),

@@ -1,4 +1,5 @@
 from __future__ import annotations
+from coalition import Coalition
 from typing import Tuple, List
 import copy
 import pygame
@@ -17,13 +18,14 @@ walls = []
 player = None
 door = None
 player_path = None
+traveled = []
 
 BOARD_WIDTH = 20
 
 #Syntactic sugary goodness
 MAPS = [Map1(), Map2(), Map3(), Map4(), Map5()]
 
-def start(options):
+def start(options, map_num):
     global RENDERER, INPUTS, action
 
     RENDERER = Renderer.get_instance()
@@ -31,10 +33,12 @@ def start(options):
     game_map = False
     action = ''
 
-    game_init(options)
+    game_init(options, map_num)
 
     initiative = [player] + guards
 
+
+    update(player)
     render()
     while not game_map:
         if type(player).__name__ == 'HumanAgent':
@@ -42,18 +46,25 @@ def start(options):
         curr_agent = initiative.pop(0)
         # Run agents turn.
         #game_map = update(curr_agent)
-        game_map = update(action)
+        game_map = update(action, action)
         print(game_map)
         initiative.append(curr_agent)
         render()
+    if player.gold == 0:
+        print("The Thief was captured and the gold was returned.")
+    else:
+        print(f"The Thief escaped with {player.gold} gold!")
+    return player.gold
+
+
 
     print("returning")
     return
 
 def game_init(options):
-    global guards, board, player, walls, door, player_path
+    global guards, board, player, walls, door, player_path, traveled
     
-    MAPS = [Map1(), Map2(), Map3(), Map4(), Map5()]
+    game_maps = [Map1, Map2, Map3, Map4, Map5]
     Map = MAPS[options['map']]
     guards = Map.guards
     board = create_board(Map.size, Map.walls, Map.guards, Map.player, Map.door)
@@ -66,41 +77,28 @@ def game_init(options):
         player = Map.human
 
     player_path = a_star.a_star(board, player.position, door.position)
+    guards = Coalition.form_coalition(guards)
+    traveled = []
 
-def update(inputs):
+def update(agent, action):
     global render_list, player, board
 
     end_game = False
 
-    classname = type(player).__name__
-    if classname == 'HumanAgent':
-        player_move(board, player, action)
+    if type(player).__name__ == 'PlayerAgent':
+        render_list = sum(board, [])
+    else:
         render_list = see(player, board)
         render_list.extend(walls)
         render_list.append(door)
+
+    classname = type(agent).__name__
+    if classname == 'HumanAgent':
+        player_move(board, agent, action)
     elif classname == 'PlayerAgent':
-        render_list = sum(board, [])
-
-        current_player_tile = board[player.position[0]][player.position[1]]
-        current_player_tile.set_agent()
-
-        next_pos = player_path.pop(0)
-        player.position = next_pos
-        board[next_pos[0]][next_pos[1]].set_agent(player)
+        agent.update(board, player_path, traveled, guards, player, door)
     else:
-        raise NotImplementedError
-
-    for guard in guards:
-        valid_moves = get_valid_neighbor_positions(guard.position)
-        # Guard may not move
-        valid_moves.append(guard.position)
-        new_position = random.choice(valid_moves)
-
-        if new_position != guard.position:
-            board[guard.position[0]][guard.position[1]].set_agent()
-
-            board[new_position[0]][new_position[1]].set_agent(guard)
-            guard.position = new_position
+        agent.update(board, player_path, traveled, guards, player, door)
 
     if player.position == door.position or len(player_path) < 1:
         # Win condition
@@ -123,7 +121,7 @@ def render():
     RENDERER.finish_rendering()
 
     if type(player).__name__ == 'PlayerAgent':
-        pygame.time.wait(500)
+        pygame.time.wait(30)
 
 
 def create_board(board_width, walls, guards, player, door):
@@ -142,23 +140,6 @@ def create_board(board_width, walls, guards, player, door):
     game_board[door[0]][door[1]].is_exit = True
 
     return game_board
-
-
-def get_valid_neighbor_positions(position: Tuple[int, int]) -> List[Tuple[int, int]]:
-    global board
-    valid_neighbors = []
-
-    valid_deltas = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-
-    for i, j in valid_deltas:
-        new_x = position[0] + i
-        new_y = position[1] + j
-        if 0 <= new_x < len(board[0]) and 0 <= new_y < len(board):
-            cur_tile = board[new_x][new_y]
-            if not cur_tile.is_wall and cur_tile.agent is None:
-                valid_neighbors.append(cur_tile.position)
-
-    return valid_neighbors
 
 
 def wall_tiles(wall_coord):
@@ -185,12 +166,9 @@ def block_parse_inputs(inputs):
 
 def player_move(board, player, action):
     if(can_move(board, player, action)):
-        remove_player(board, player)
-        player.update(action, True)
-        move_player(board, player)
+        player.update(action, True, board, guards)
     else:
-        player.update(action, False)
-    # bump
+        player.update(action, False, board, guards)
 
 
 def can_move(board, player, action):
@@ -213,12 +191,3 @@ def can_move(board, player, action):
             move = False
     return move
 
-
-def move_player(board, player):
-    board[player.position[0]][player.position[1]].set_agent(player)
-    board[player.position[0]][player.position[1]].is_player = True
-
-
-def remove_player(board, player):
-    board[player.position[0]][player.position[1]].set_agent(None)
-    board[player.position[0]][player.position[1]].is_player = False

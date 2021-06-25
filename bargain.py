@@ -1,3 +1,4 @@
+from guard_agent import GuardAgent
 from typing import List, Tuple, Union
 from abstract_agent import AbstractAgent
 import numpy as np
@@ -7,8 +8,8 @@ from random import randint, random
 BRIBE_AMOUNT = 25
 
 
-def bribe(player: AbstractAgent, agent: AbstractAgent)\
-        -> Tuple[AbstractAgent, AbstractAgent]:
+def bribe(player: AbstractAgent, agent: GuardAgent)\
+        -> Tuple[AbstractAgent, AbstractAgent, bool]:
 
     # Form matrix:
     #              kill    bribe
@@ -17,10 +18,43 @@ def bribe(player: AbstractAgent, agent: AbstractAgent)\
     #
 
     if player.gold >= BRIBE_AMOUNT:
-        # TODO: Calculate bribe here based on criteria
-        pass
 
-    return player, agent
+        matrix = [[(player.weapon - agent.get_perceived_power(),
+                    agent.weapon - player.get_perceived_power()),
+                   (player.weapon - agent.get_perceived_power(),
+                   BRIBE_AMOUNT)],
+                  [(player.gold - agent.get_perceived_power(),
+                   player.get_perceived_power()),
+                   (player.gold,
+                   BRIBE_AMOUNT)]]
+
+        print(f"| {matrix[0][0]} | {matrix[0][1]} |")
+        print(f"| {matrix[1][0]} | {matrix[1][1]} |")
+
+
+        p, q = mixed_strategy_2x2(matrix)
+
+        print(f"p = {p:.4f}")
+        print(f"q = {q:.4f}")
+
+        if p is None or q is None:
+            bribe_success = False
+            return player, agent, bribe_success
+
+        if 0 <= p <= 1 and 0 <= q <= 1:
+            if (p == 0 and q == 0) or \
+                    random() < (1 - p) and random() < (1 - q):
+                agent.bribe_offered = True
+                player.gold -= BRIBE_AMOUNT
+                agent.gold += BRIBE_AMOUNT
+                bribe_success = True
+                agent.is_bribed = True
+                print("The guard accepted the bribe")
+                return bribe_success
+
+    bribe_success = False
+    print("The guard rejected the bribe...")
+    return bribe_success
 
 
 def mixed_strategy_2x2(matrix: List[List[Tuple[int, int]]]) \
@@ -44,23 +78,27 @@ def mixed_strategy_2x2(matrix: List[List[Tuple[int, int]]]) \
     c_d = m[1, 1][1]
 
     r_a = m[0, 0][0]
-    r_b = m[1, 0][0]
-    r_c = m[0, 1][0]
+    r_b = m[0, 1][0]
+    r_c = m[1, 0][0]
     r_d = m[1, 1][0]
 
     p = None
     if (c_a - c_b - c_c + c_d) != 0:
         p = (c_d - c_b)/(c_a - c_b - c_c + c_d)
+    if r_a < r_c and r_b < r_d:
+        p = 0
 
     q = None
     if (r_a - r_b - r_c + r_d) != 0:
-        q = (r_d - r_c)/(r_a - r_b - r_c + r_d)
+        q = (r_d - r_b)/(r_a - r_b - r_c + r_d)
+    if c_a < c_c and c_b < c_d:
+        q = 0
 
     return (p, q)
 
 
-def pure_strategy_2x2(matrix: List[List[tuple[int, int]]]) \
-        -> List[tuple[int, int]]:
+def pure_strategy_2x2(matrix: List[List[Tuple[int, int]]]) \
+        -> List[Tuple[int, int]]:
     col_strategies = []
     row_strategies = []
 
@@ -91,8 +129,8 @@ def pure_strategy_2x2(matrix: List[List[tuple[int, int]]]) \
     return result
 
 
-def get_p_q(matrix: List[List[tuple[int, int]]]) \
-        -> tuple[float, float]:
+def get_p_q(matrix: List[List[Tuple[int, int]]]) \
+        -> Tuple[float, float]:
     mixed_p, mixed_q = mixed_strategy_2x2(matrix)
     pure_solution = pure_strategy_2x2(matrix)
 
