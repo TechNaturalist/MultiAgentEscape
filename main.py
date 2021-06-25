@@ -18,11 +18,17 @@ def main():
       
         menu = Menu();
         menu_options = menu.start()
-        game = Game();
-        gold = game.start(menu_options)
+        gold = 0 
 
-        #for i in range(5):
-        #    gold += game.start(menu_options, i)
+        if menu_options['map'] == 5:
+            for i in range(5):
+                menu_options['map'] = i
+                game = Game();
+                gold += game.start(menu_options)
+        else:
+            game = Game();
+            gold += game.start(menu_options) 
+
         print(f"The Thief was able to steal a total of {gold} gold!")
         print("Thank you for playing!")
 
