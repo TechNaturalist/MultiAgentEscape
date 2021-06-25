@@ -2,7 +2,6 @@ from player_agent import PlayerAgent
 from guard_agent import GuardAgent
 from human_agent import HumanAgent
 
-
 class Map1:
     size = 20
     walls = [(0, 4), (1, 4), (2, 4), (3, 4), (4, 4), (8, 4), (9, 4), (10, 4), (11, 4), (12, 4), (13, 4), (14, 4),

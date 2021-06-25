@@ -1,7 +1,7 @@
 from __future__ import annotations
 from coalition import Coalition
 from typing import Tuple, List
-
+import copy
 import pygame
 from tile import Tile
 from inputs import Inputs
@@ -22,8 +22,7 @@ traveled = []
 
 BOARD_WIDTH = 20
 
-
-def start(options, map_num):
+def start(options):
     global RENDERER, INPUTS, action
 
     RENDERER = Renderer.get_instance()
@@ -31,17 +30,20 @@ def start(options, map_num):
     game_map = False
     action = ''
 
-    game_init(options, map_num)
+    game_init(options)
 
     initiative = [player] + guards
 
-    update(player)
+
+    update(player, action)
+    render()
     while not game_map:
-        if type(player).__name__ == 'HumanAgent':
-            action = parse_inputs(INPUTS.get_input())
         curr_agent = initiative.pop(0)
+        if (type(player).__name__ == 'HumanAgent'
+            and type(curr_agent).__name__ == 'HumanAgent'):
+            action = block_parse_inputs(INPUTS.get_input())
         # Run agents turn.
-        game_map = update(curr_agent)
+        game_map = update(curr_agent, action)
         initiative.append(curr_agent)
         render()
     if player.gold == 0:
@@ -51,60 +53,29 @@ def start(options, map_num):
     return player.gold
 
 
-def game_init(options, map_num):
+def game_init(options):
     global guards, board, player, walls, door, player_path, traveled
-
+    
     game_maps = [Map1, Map2, Map3, Map4, Map5]
+    Map = game_maps[options['map']]
+    guards = Map.guards
+    board = create_board(Map.size, Map.walls, Map.guards, Map.player, Map.door)
+    walls = wall_tiles(Map.walls)
+    door = board[Map.door[0]][Map.door[1]]
 
-    guards = game_maps[map_num].guards
-    player = game_maps[map_num].player
-    board = create_board(game_maps[map_num].size, game_maps[map_num].walls, game_maps[map_num].guards, game_maps[map_num].player, game_maps[map_num].door)
-    walls = wall_tiles(game_maps[map_num].walls)
-    door = board[game_maps[map_num].door[0]][game_maps[map_num].door[1]]
-
-    # guards = Map1.guards
-    # player = Map1.player
-    # board = create_board(Map1.size, Map1.walls, Map1.guards, Map1.player, Map1.door)
-    # walls = wall_tiles(Map1.walls)
-    # door = board[Map1.door[0]][Map1.door[1]]
-    #
-    # guards = Map2.guards
-    # player = Map2.player
-    # board = create_board(Map2.size, Map2.walls, Map2.guards, Map2.player, Map2.door)
-    # walls = wall_tiles(Map2.walls)
-    # door = board[Map2.door[0]][Map2.door[1]]
-
-    # guards = Map3.guards
-    # player = Map3.player
-    # board = create_board(Map3.size, Map3.walls,
-    #                      Map3.guards, Map3.player, Map3.door)
-    # walls = wall_tiles(Map3.walls)
-    # door = board[Map3.door[0]][Map3.door[1]]
-
-    # guards = Map4.guards
-    # player = Map4.player
-    # board = create_board(Map4.size, Map4.walls, Map4.guards, Map4.player, Map4.door)
-    # walls = wall_tiles(Map4.walls)
-    # door = board[Map4.door[0]][Map4.door[1]]
-
-    # guards = Map5.guards
-    # player = Map5.player
-    # board = create_board(Map5.size, Map5.walls, Map5.guards, Map5.player, Map5.door)
-    # walls = wall_tiles(Map5.walls)
-    # door = board[Map5.door[0]][Map5.door[1]]
+    if options['player'] == 0:
+        player = Map.player
+    else:
+        player = Map.human
 
     player_path = a_star.a_star(board, player.position, door.position)
     guards = Coalition.form_coalition(guards)
     traveled = []
 
-
-def update(agent):
+def update(agent, action):
     global render_list, player, board
 
-    if player.position == door.position or len(player_path) < 1:
-        # Win condition
-        # TODO: Add win condition logic/display
-        return True
+    end_game = False
 
     if type(player).__name__ == 'PlayerAgent':
         render_list = sum(board, [])
@@ -120,14 +91,24 @@ def update(agent):
         agent.update(board, player_path, traveled, guards, player, door)
     else:
         agent.update(board, player_path, traveled, guards, player, door)
+        pass
+    if player.position == door.position or len(player_path) < 1:
+        # Win condition
+        # TODO: Add win condition logic/display
+        print("hello")
+        end_game = True
+
+    return end_game
 
 
 def render():
+    print("render")
     RENDERER.game_background()
     for sprite in render_list:
         RENDERER.draw_tile(sprite)
 
-    # RENDERER.draw_path(player_path)
+    if type(player).__name__ == 'PlayerAgent':
+        RENDERER.draw_path(player_path)
 
     RENDERER.draw_grid()
     RENDERER.finish_rendering()
@@ -161,11 +142,19 @@ def wall_tiles(wall_coord):
     return wall_list
 
 
-def parse_inputs(inputs):
+#def parse_inputs(inputs):
+#    action = ''
+#    while (len(inputs['keys']) != 0):
+#        action = inputs['keys'][0]
+#    return action
+
+def block_parse_inputs(inputs):
     action = ''
-    if (len(inputs['keys']) != 0):
-        action = inputs['keys'][0]
+    while (len(inputs['keys']) == 0):
+        inputs=INPUTS.get_input()
+    action = inputs['keys'][0]
     return action
+
 
 
 def player_move(board, player, action):
